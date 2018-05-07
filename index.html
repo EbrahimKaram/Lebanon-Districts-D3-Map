@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lebanon D3.js Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="D3.js map of Lebanon and its districts.">
+    <meta charset="utf-8"> 
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+  
+  <!-- Tooltip box. It appears when user hovers over the map.  -->
+  <div id="tooltip" class="hidden">
+    <div><strong>Governorate:</strong> <span id="governorate">100</span></div>
+    <div><strong>District:</strong> <span id="district">200</span></div>
+  </div>
+
+
+  <!-- ADD D3.JS VISUALIZATION IN #VIZ.-->        
+  <div class='container-fluid'>
+    <div class='row well well-lg'>
+      <div id="viz" class='col-md-8 text-center' style="border:3px solid gray; background-color: #f8f3ed;"></div>    
+
+      <div class='col-md-4'>
+        <h1>Lebanon</h1>
+        <p>Map of Lebanon, its governorates and districts. I made it with D3.js and a TopoJSON file converted from a Shapefile downloaded at <a href="http://www.gadm.org/">http://www.gadm.org.</a>
+        
+            I would like to give credit to <a href="https://github.com/CodeWritingCow">CodeWritingCow</a> for his repository <a href="https://github.com/CodeWritingCow/d3-js-maps-syria-districts" >D3.js map of Syria</a> </p>
+          
+          <p>In order to convert the file from a ShapeFile to TOPOJSON I used <a href="http://mapshaper.org/">MapShaper</a> a free online tool</p>
+
+        <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
+        <div>
+          <strong>Governorate:</strong> <span id="governorate-name"></span>
+        </div>
+        <div>
+          <strong>District:</strong> <span id="district-name"></span>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br> 
+      </div>
+    </div>  
+  </div>
+
+ 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>  
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+  <script src="//d3js.org/topojson.v1.min.js"></script>
+
+  <link rel="stylesheet" href="tooltip.css">
+
+  <!-- D3.js code creates map of Syria. -->
+  <script src="map.js"></script>
+  </body>
+</html>
