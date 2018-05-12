@@ -29,6 +29,18 @@ function resize() {
 
     // resize map
     svg1.selectAll("path").attr('d', path1);
+    
+    //For the map Above
+    projection.translate([width / 2, height / 2])
+              .center(syria_center)
+              .scale(width * [mapRatio + mapRatioAdjuster]);
+
+    // resize map container
+    svg.style('width', width + 'px')
+       .style('height', height + 'px');
+
+    // resize map
+    svg.selectAll("path").attr('d', path);
 }
 
 // adds zoom function to map
