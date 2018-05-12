@@ -1,6 +1,6 @@
-#D3.js Map: Lebanon
+# D3.js Map: Lebanon
 
-This Repository is a very slightly modified verion of Gary Pang's repository. 
+This Repository is a very slightly modified verion of Gary Pang's repository.
 https://github.com/CodeWritingCow/d3-js-maps-syria-districts
 
 

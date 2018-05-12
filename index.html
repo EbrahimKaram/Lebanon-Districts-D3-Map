@@ -14,6 +14,7 @@
     <div id="tooltip" class="hidden">
         <div><strong>Governorate:</strong> <span id="governorate">100</span></div>
         <div><strong>District:</strong> <span id="district">200</span></div>
+        <div id="villageEntry" class="hidden"><strong>Village:</strong> <span id="village">300</span></div>
     </div>
 
 
@@ -42,7 +43,7 @@
                 <br>
             </div>
         </div>
-   
+
         <div class='row well well-lg'>
             <div id="villages" class='col-md-8 text-center' style="border:3px solid gray;background-color: #f8f3ed;padding-right: 0px;padding-left: 0px;"></div>
 
@@ -51,20 +52,20 @@
                 <h3>Villages</h3>
                 <p>The map shows all the various villages in Lebanon.</p>
 
-                
+
                 <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
                 <div>
                     <strong>Governorate:</strong> <span id="governorate-name-1"></span>
                 </div>
                 <div>
-                    <strong>District:</strong> <span id="district-name-2"></span>
+                    <strong>District:</strong> <span id="district-name-1"></span>
                 </div>
                 <div>
-                    <strong>Village:</strong> <span id="village-name-3"> </span>
+                    <strong>Village:</strong> <span id="village-name-1"> </span>
                 </div>
                 <br>
                 <br>
-                
+
             </div>
         </div>
     </div>
@@ -77,7 +78,8 @@
 
     <link rel="stylesheet" href="tooltip.css">
 
-    <!-- D3.js code creates map of Syria. -->
+    <!-- D3.js code creates map of Lebanon. -->
     <script src="districts.js"></script>
+    <script src="villages.js"></script>
 </body>
 </html>

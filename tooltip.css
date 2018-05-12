@@ -20,6 +20,10 @@ path:hover {
 #tooltip.hidden {
         display: none;
 }
+
+#tooltip div.hidden{
+     display: none;
+}
 #tooltip p {
         margin: 0;
         font-family: sans-serif;
