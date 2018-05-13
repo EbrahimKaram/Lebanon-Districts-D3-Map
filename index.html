@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>Lebanon D3.js Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="D3.js map of Lebanon and its districts.">
@@ -17,9 +18,45 @@
         <div id="villageEntry" class="hidden"><strong>Village:</strong> <span id="village">300</span></div>
     </div>
 
+    <header align='center' class="header">
+        <div>
+            <h1>Lebanese Areas in D3 Maps</h1>
+        </div>
+        <div>View Source Code on <a href="https://github.com/EbrahimKaram/Lebanon-Districts-D3-Map">Github</a></div>
+       
+        <div >
+            <a class="github-button" href="https://github.com/EbrahimKaram" data-size="large" data-show-count="true" aria-label="Follow @EbrahimKaram on GitHub">Follow @EbrahimKaram</a>
+        </div>
+        <div>
+            <!-- Place this tag where you want the button to render. -->
+            <a class="github-button" href="https://github.com/EbrahimKaram/Lebanon-Districts-D3-Map/fork" data-size="large" aria-label="Fork EbrahimKaram/Lebanon-Districts-D3-Map on GitHub">Fork</a>
+        </div>
+
+        
+    </header>
+
 
     <!-- ADD D3.JS VISUALIZATION IN #VIZ.-->
     <div class='container-fluid'>
+        <div class='row well well-lg'>
+            <div id="mohafaza" class='col-md-8 text-center' style="border:3px solid gray;background-color: #f8f3ed;padding-right: 0px;padding-left: 0px;"></div>
+
+            <div class='col-md-4'>
+                <h1>Lebanon</h1>
+                <h3>Mohafaza</h3>
+                <p>Lebanon has 8 main Mohafazas or governorates. Please point on the map to see them.</p>
+                <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
+                <div>
+                    <strong>Mohafaza:</strong> <span id="Mohafaza-name"></span>
+                </div>
+
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+
         <div class='row well well-lg'>
             <div id="districts" class='col-md-8 text-center' style="border:3px solid gray;background-color: #f8f3ed;padding-right: 0px;padding-left: 0px;"></div>
 
@@ -49,8 +86,14 @@
 
             <div class='col-md-4'>
                 <h1>Lebanon</h1>
-                <h3>Villages</h3>
-                <p>The map shows all the various villages in Lebanon.</p>
+                <h3>Villages/Muncipalities</h3>
+                <p>The map shows all the various villages in Lebanon. I would like to point out specifically that the map shoes the various municipalities for Lebanon not the voting districts.</p>
+
+                <p>To Illustrate, Baskinta has one Municipality but has 2 voting districts which are north and south Baskinta. As a result, you only see one baskinta.</p>
+
+                <p>Another example is Beirut Central District, Beirut Central distric is not a proper district. It's mostly the beirut port and a military base so it does't show up in the civilian votiing list however it is it's own district/village or part of the city. </p>
+
+                <p>Please share your input on what is probably wrong with this data and how is the best way to fix it by Tweeting @BahoKaram. </p>
 
 
                 <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
@@ -80,6 +123,11 @@
 
     <!-- D3.js code creates map of Lebanon. -->
     <script src="districts.js"></script>
+    <script src="mohafaza.js"></script>
     <script src="villages.js"></script>
+    
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
 </body>
+
 </html>
