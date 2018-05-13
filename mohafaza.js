@@ -91,24 +91,20 @@ d3.json("Lebanon_Level1.json", function(error, leb1) {
        .select('#governorate')
        .text(d.properties.NAME_1);
 
-       // update district name
-       d3.select("#tooltip")
-       .select("#district")
-       .text(d.properties.NAME_2);       
+           
 
        // Update province and district names in info box
-       d3.select('#governorate-name')
+       d3.select("#Mohafaza-name")
        .text(d.properties.NAME_1); 
-
-       d3.select('#district-name')
-       .text(d.properties.NAME_2);
 
        // Show tooltip
        d3.select("#tooltip").classed("hidden", false);
+        d3.select("#districtEntry").classed("hidden",true);
        })
     
        // Hide tooltip when user stops hovering over map
        .on("mouseout", function() {
        d3.select("#tooltip").classed("hidden", true);
+        d3.select("#districtEntry").classed("hidden",false);
        });      
 });
