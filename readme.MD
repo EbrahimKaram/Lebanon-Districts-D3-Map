@@ -1,16 +1,40 @@
 # D3.js Map: Lebanon
 
-This Repository is a very slightly modified verion of Gary Pang's repository.
-https://github.com/CodeWritingCow/d3-js-maps-syria-districts
+## How it was done
+This Repository is a very slightly modified verion of [Gary Pang's repository.](https://github.com/CodeWritingCow/d3-js-maps-syria-districts)
 
 
-This will hopefull open Up the possibility of people using the Lebanon Map JSON in their projects
+This will hopefully allow other developer to show their data on a Lebanese map and make it easier for data visualization.
 
-I got the Shapefiles for lebanon here
+The Map is based on 3 ShapeFile files downloaded from this [website](https://gadm.org/download_country_v3.html)
 
-https://gadm.org/download_country_v3.html
+The Json is a TOPOJSON file which takes less space then your your typical geojson file.
 
-Map of Lebanon, its governorates and districts. I made it with D3.js and a TopoJSON file converted from a Shapefile downloaded at <a href="http://www.gadm.org/">http://www.gadm.org.</a> I would like to give credit to <a href="https://github.com/CodeWritingCow">CodeWritingCow</a> for his repository <a href="https://github.com/CodeWritingCow/d3-js-maps-syria-districts">D3.js map of Syria
+In order to convert the ShapeFile to a topo Json I used the following [site](http://mapshaper.org/).
+
+## The Actual Site
+
+You can check the interactive D3 map on the link below
+>https://ebrahimkaram.github.io/Lebanon-Districts-D3-Map/
+
+It's divided into 3 sections.
+### Mohafaza / Governorates
+You can use your mouse to hover over the different areas and check their name.
+
+Now developers can add data for each region that would show on the tooltip.
+
+### Qada2 / Districts
+
+As you hover your mouse on the region. The tooltip shows the name of the Qada2 and the region that is in.
+
+### Diya3 / Villages
+
+The tooltip would show the name of the Village, the name of the district it is apart of, and the Mohafaza it is apart of.
 
 
-<p>In order to convert the file from a ShapeFile to TOPOJSON I used <a href="http://mapshaper.org/">MapShaper</a> a free online tool</p>
+## Acknowledgments
+I would like to give credit [CodeWritingCow](https://github.com/CodeWritingCow) for making his [D3.js map of Syria repository](https://github.com/CodeWritingCow/d3-js-maps-syria-districts) public making the development of this repository much easier.
+
+## Further Info
+
+Please feel free to submit any issues, star the repository, and fork it for your personal projects. I'm putting this project under an MIT open License to encourage as many projects as possible for whatever purpose they serve. I'm also available on twitter at @BahoKaram
