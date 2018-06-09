@@ -97,6 +97,10 @@ d3.json("Lebanon_Level3.json", function(error, leb) {
     .data(topojson.feature(leb, leb.objects.gadm36_LBN_3).features)
     .enter()
     .append("path")
+    //Added An ID for each in order to search for them later
+    .attr("mohafaza",function(d) {return d.properties.NAME_1.replace(/\s/g, '');})
+    .attr("district", function(d) {return d.properties.NAME_2.replace(/\s/g, '');})
+    .attr("village",function(d) {return d.properties.NAME_3.replace(/\s/g, '');})
     .attr("d", path)
 
     // Sets colors of fill and stroke for each district. Sets stroke width, too.
@@ -106,8 +110,12 @@ d3.json("Lebanon_Level3.json", function(error, leb) {
 
     // Update tooltip and info boxes when user hovers over a district on map
     .on("mousemove", function(d) {
-
-       //Update the tooltip position and value
+        
+        var district=d.properties.NAME_2.replace(/\s/g, '');
+        
+        d3.selectAll("path[district="+district+"]").attr("fill","#ffffff")
+       
+        //Update the tooltip position and value
        d3.select("#tooltip")
        .style("top", (d3.event.pageY) + 20 + "px")
        .style("left", (d3.event.pageX) + 20 + "px")
@@ -138,11 +146,14 @@ d3.json("Lebanon_Level3.json", function(error, leb) {
        // Show tooltip
        d3.select("#tooltip").classed("hidden", false);
         d3.select("#tooltip").select("#villageEntry").classed("hidden", false);
+        d3.select("#tooltip").select("#districtEntry").classed("hidden",false);
        })
 
        // Hide tooltip when user stops hovering over map
        .on("mouseout", function() {
+        d3.selectAll("path").attr("fill","#e8d8c3");
        d3.select("#tooltip").classed("hidden", true);
         d3.select("#tooltip").select("#villageEntry").classed("hidden", true);
+        d3.select("#tooltip").select("#districtEntry").classed("hidden",false);
        });
 });
