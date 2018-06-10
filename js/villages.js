@@ -113,7 +113,7 @@ d3.json("Lebanon_Level3.json", function(error, leb) {
         
         var district=d.properties.NAME_2.replace(/\s/g, '');
         
-        d3.selectAll("path[district="+district+"]").attr("fill","#ffffff")
+        d3.selectAll("path[district="+district+"]").attr("fill","#ffffff");
        
         //Update the tooltip position and value
        d3.select("#tooltip")
