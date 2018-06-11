@@ -29,7 +29,7 @@ As you hover your mouse on the region. The tooltip shows the name of the Qada2 a
 
 ### Diya3 / Villages
 
-The tootip would show the name of the Village, the name of the district it is apart of, and the Mohafaza it is apart of.
+The tooltip would show the name of the Village, the name of the district it is apart of, and the Mohafaza it is apart of.
 
 
 ## Acknowledgments
