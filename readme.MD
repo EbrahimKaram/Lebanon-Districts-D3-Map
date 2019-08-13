@@ -19,12 +19,13 @@ You can check the interactive D3 map on the link below
 
 It's divided into 3 sections.
 ### Mohafaza / Governorates
+ muhafazah (محافظة)
 You can use your mouse to hover over the different areas and check their name.
 
 Now developers can add data for each region that would show on the tooltip.
 
 ### Qada2 / Districts
-
+kaza (قضاء)
 As you hover your mouse on the region. The tooltip shows the name of the Qada2 and the region that is in.
 
 ### Diya3 / Villages
@@ -38,3 +39,8 @@ I would like to give credit [CodeWritingCow](https://github.com/CodeWritingCow) 
 ## Further Info
 
 Please feel free to submit any issues, star the repository, and fork it for your personal projects. I'm putting this project under an MIT open License to encourage as many projects as possible for whatever purpose they serve. I'm also available on twitter at @BahoKaram
+
+
+http://www.localiban.org/
+https://www.libandata.org/en/
+https://www.libandata.org/en/article/administrative-divisions-lebanon-2016-muhafazah-s-and-kaza-s
