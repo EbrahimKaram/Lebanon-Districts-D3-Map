@@ -44,3 +44,7 @@ Please feel free to submit any issues, star the repository, and fork it for your
 http://www.localiban.org/
 https://www.libandata.org/en/
 https://www.libandata.org/en/article/administrative-divisions-lebanon-2016-muhafazah-s-and-kaza-s
+
+First level : Eight muhafazah-s.
+Second level : Twenty-five kaza-s.
+Third level : 1 029 municipalities (baladia, may 2016). Two or more municipalities could form a federation of municipalities.
