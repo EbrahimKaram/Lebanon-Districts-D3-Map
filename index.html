@@ -9,14 +9,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-120812209-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120812209-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-  gtag('config', 'UA-120812209-1');
-</script>
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-120812209-1');
+
+    </script>
 
 </head>
 
@@ -25,9 +29,13 @@
     <!-- Tooltip box. It appears when user hovers over the map.  -->
     <div id="tooltip" class="hidden">
         <div><strong>Governorate:</strong> <span id="governorate">100</span></div>
-        <div><strong>محافظة:</strong> <span id="governorate-arabic">100</span></div>
-        <div id="districtEntry" class="hidden"><strong>District:</strong> <span id="district">200</span></div>
+        <div class="districtEntry" class="hidden"><strong>District:</strong> <span id="district">200</span></div>
         <div id="villageEntry" class="hidden"><strong>Village:</strong> <span id="village">300</span></div>
+        
+        
+        <div><strong>محافظة:</strong> <span id="governorate-arabic">100</span></div>
+        <div class="districtEntry" class="hidden"><strong>قضاء:</strong> <span id="district-arabic">200</span></div>
+        
     </div>
 
     <header align='center' class="header">
@@ -55,14 +63,15 @@
 
             <div class='col-md-4'>
                 <h1>Lebanon</h1>
-                <h3>Mohafaza</h3>
+                <h3>Mohafaza - محافظة</h3>
                 <p>Lebanon has 8 main Mohafazas or governorates. Please point on the map to see them.</p>
                 <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
                 <div>
                     <strong>Governorate:</strong> <span id="Mohafaza-name"></span>
-                    <br>
-                    <strong>محافظة</strong>: <span id="Mohafaza-name-arabic"></span>  
-                    
+                </div>
+                <div align='right'>
+                    <strong>محافظة</strong>: <span id="Mohafaza-name-arabic"></span>
+
                 </div>
 
                 <br>
@@ -77,7 +86,8 @@
 
             <div class='col-md-4'>
                 <h1>Lebanon</h1>
-                <h3>Qada2</h3>
+                <h3>Qada2 - قضاء</h3>
+                
                 <p> Each Mohafaza is divided into several districts/Qada2. Now Lebanon currently has 26 districts ut but according to the shapefile that this map is based on some districts belong to multiple govornmates. If anyone has any suggestions, please let me know on twitter @BahoKaram. If it would be possible please submit it as an issue on the repository with your possible fix.
                 </p>
 
@@ -86,8 +96,16 @@
                 <div>
                     <strong>Governorate:</strong> <span id="governorate-name"></span>
                 </div>
+
                 <div>
                     <strong>District:</strong> <span id="district-name"></span>
+                </div>
+                <div align='right'>
+                    <strong>محافظة</strong>: <span id="governorate-name-arabic"></span>
+
+                </div>
+                <div align='right'>
+                    <strong>قضاء:</strong> <span id="district-name-arabic"></span>
                 </div>
                 <br>
                 <br>
