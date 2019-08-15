@@ -110,7 +110,7 @@ d3.json("Lebanon_Level1.json", function (error, leb1) {
 
             // Show tooltip
             d3.select("#tooltip").classed("hidden", false);
-            d3.select("#districtEntry").classed("hidden", true);
+            d3.selectAll('.districtEntry').classed("hidden", true);
         })
 
         // Hide tooltip when user stops hovering over map

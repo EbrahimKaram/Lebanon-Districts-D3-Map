@@ -125,7 +125,7 @@ d3.json("Lebanon_Level2.json", function (error, syr) {
 
             // Show tooltip
             d3.select("#tooltip").classed("hidden", false);
-            d3.select("#tooltip").select("#districtEntry").classed("hidden", false);
+            d3.select("#tooltip").selectAll(".districtEntry").classed("hidden", false);
 
         })
 
