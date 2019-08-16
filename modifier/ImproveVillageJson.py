@@ -1,6 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import json
 import pandas as pd
+import numpy as np
 import codecs
+
 
 filename = "modifier\Lebanon_Level3.json"
 
@@ -39,6 +43,11 @@ for i in range(0, number_of_districts):
     english_village=datastore['objects'][name]["geometries"][i]['properties']['NAME_3']
     print(english_village)
     datastore['objects'][name]["geometries"][i]['properties']['Arabic_NAME_3'] = villagePairs.loc[english_village, 'Arabic Name']
+
+    if (villagePairs.loc[english_village, 'Arabic Name']==np.nan) or (str(villagePairs.loc[english_village, 'Arabic Name'])=='nan'):
+        datastore['objects'][name]["geometries"][i]['properties']['Arabic_NAME_3'] =""
+    else:
+        print(str(str(villagePairs.loc[english_village, 'Arabic Name']).encode('utf-8')))
 
 
 
