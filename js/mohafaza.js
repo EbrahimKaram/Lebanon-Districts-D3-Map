@@ -116,6 +116,6 @@ d3.json("Lebanon_Level1.json", function (error, leb1) {
         // Hide tooltip when user stops hovering over map
         .on("mouseout", function () {
             d3.select("#tooltip").classed("hidden", true);
-            d3.select("#districtEntry").classed("hidden", false);
+            d3.selectAll('.districtEntry')).classed("hidden", false);
         });
 });
