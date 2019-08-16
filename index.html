@@ -29,13 +29,15 @@
     <!-- Tooltip box. It appears when user hovers over the map.  -->
     <div id="tooltip" class="hidden">
         <div><strong>Governorate:</strong> <span id="governorate">100</span></div>
-        <div class="districtEntry hidden"><strong>District:</strong> <span id="district">200</span></div>
-        <div id="villageEntry" class="hidden"><strong>Village:</strong> <span id="village">300</span></div>
-        
-        
+        <div class="districtEntry hidden"><strong>District:</strong> <span id="district"></span></div>
+        <div class="villageEntry hidden"><strong>Village:</strong> <span id="village"></span></div>
+
+
         <div><strong>محافظة:</strong> <span id="governorate-arabic">100</span></div>
-        <div class="districtEntry hidden"><strong>قضاء:</strong> <span id="district-arabic">200</span></div>
-        
+        <div class="districtEntry hidden"><strong>قضاء:</strong> <span id="district-arabic"></span></div>
+        <div class="villageEntry hidden"><strong>ضيعة:</strong> <span id="village-arabic"></span>
+        </div>
+
     </div>
 
     <header align='center' class="header">
@@ -87,8 +89,8 @@
             <div class='col-md-4'>
                 <h1>Lebanon</h1>
                 <h3>Qada2 - قضاء</h3>
-                
-                <p> Each Mohafaza is divided into several districts/Qada2. Now Lebanon currently has 26 districts ut but according to the shapefile that this map is based on some districts belong to multiple govornmates. If anyone has any suggestions, please let me know on twitter @BahoKaram. If it would be possible please submit it as an issue on the repository with your possible fix.
+
+                <p> Each Mohafaza is divided into several districts/Qada2. Now Lebanon currently has 26 districts but according to the shapefile that this map is based on some districts belong to multiple govornmates. If anyone has any suggestions, please let me know on twitter @BahoKaram. If it would be possible, please submit it as an issue on the repository with your possible fix.
                 </p>
 
 
@@ -149,6 +151,16 @@
                 </div>
                 <div>
                     <strong>Village:</strong> <span id="village-name-1"> </span>
+                </div>
+                <div align='right'>
+                    <strong>محافظة</strong>: <span id="governorate-name-1-arabic"></span>
+
+                </div>
+                <div align='right'>
+                    <strong>قضاء:</strong> <span id="district-name-1-arabic"></span>
+                </div>
+                <div align='right'>
+                    <strong>ضيعة:</strong> <span id="village-name-1-arabic"> </span>
                 </div>
                 <br>
                 <br>
