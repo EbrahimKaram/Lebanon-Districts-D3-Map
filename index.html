@@ -68,12 +68,14 @@
                 <h3>Mohafaza - محافظة</h3>
                 <p>Lebanon has 8 main Mohafazas or governorates. Please point on the map to see them.</p>
                 <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
-                <div>
-                    <strong>Governorate:</strong> <span id="Mohafaza-name"></span>
-                </div>
-                <div align='right'>
-                    <strong>محافظة</strong>: <span id="Mohafaza-name-arabic"></span>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <strong>Governorate:</strong> <span id="Mohafaza-name"></span>
+                    </div>
+                    <div class="col-xs-6" align='right'>
+                        <strong>محافظة</strong>: <span id="Mohafaza-name-arabic"></span>
 
+                    </div>
                 </div>
 
                 <br>
@@ -95,23 +97,30 @@
 
 
                 <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
-                <div>
-                    <strong>Governorate:</strong> <span id="governorate-name"></span>
-                </div>
+                <div class="row">
 
-                <div>
-                    <strong>District:</strong> <span id="district-name"></span>
-                </div>
-                <div align='right'>
-                    <strong>محافظة</strong>: <span id="governorate-name-arabic"></span>
+                    <div class="col-xs-6">
+                        <div>
+                            <strong>Governorate:</strong> <span id="governorate-name"></span>
+                        </div>
 
+
+                        <div>
+                            <strong>District:</strong> <span id="district-name"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div align='right'>
+                            <strong>محافظة</strong>: <span id="governorate-name-arabic"></span>
+
+                        </div>
+                        <div align='right'>
+                            <strong>قضاء:</strong> <span id="district-name-arabic"></span>
+                        </div>
+                    </div>
                 </div>
-                <div align='right'>
-                    <strong>قضاء:</strong> <span id="district-name-arabic"></span>
-                </div>
                 <br>
-                <br>
-                <br>
+
                 <br>
             </div>
         </div>
@@ -121,7 +130,7 @@
 
             <div class='col-md-4'>
                 <h1>Lebanon</h1>
-                <h3>Villages/Muncipalities</h3>
+                <h3>Villages/Muncipalities - ضيعة</h3>
                 <br>
 
                 <form autocomplete="off">
@@ -132,7 +141,6 @@
                 </form>
 
                 <br>
-                <br>
                 <p>The map shows all the various villages in Lebanon. I would like to point out specifically that the map shoes the various municipalities for Lebanon not the voting districts.</p>
 
                 <p>To Illustrate, Baskinta has one Municipality but has 2 voting districts which are north and south Baskinta. As a result, you only see one baskinta.</p>
@@ -140,31 +148,38 @@
                 <p>Another example is Beirut Central District, Beirut Central distric is not a proper district. It's mostly the beirut port and a military base so it does't show up in the civilian votiing list however it is it's own district/village or part of the city. </p>
 
                 <p>Please share your input on what is probably wrong with this data and how is the best way to fix it by Tweeting @BahoKaram or submitting an issue to the <a href="https://github.com/EbrahimKaram/Lebanon-Districts-D3-Map">Github repository</a> </p>
-                
+
                 <p> Please note that araboc translation for all villages is a work in progress. If you would like to provide aid, please look into the <a href="https://github.com/EbrahimKaram/Lebanese-Villages-List">Lebanese-Villages-List Repository</a></p>
 
 
                 <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
-                <div>
-                    <strong>Governorate:</strong> <span id="governorate-name-1"></span>
-                </div>
-                <div>
-                    <strong>District:</strong> <span id="district-name-1"></span>
-                </div>
-                <div>
-                    <strong>Village:</strong> <span id="village-name-1"> </span>
-                </div>
-                <div align='right'>
-                    <strong>محافظة</strong>: <span id="governorate-name-1-arabic"></span>
+                <div class="row">
 
+                    <div class="col-xs-6">
+                        <div>
+                            <strong>Governorate:</strong> <span id="governorate-name-1"></span>
+                        </div>
+                        <div>
+                            <strong>District:</strong> <span id="district-name-1"></span>
+                        </div>
+                        <div>
+                            <strong>Village:</strong> <span id="village-name-1"> </span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <div align='right'>
+                            <strong>محافظة</strong>: <span id="governorate-name-1-arabic"></span>
+
+                        </div>
+                        <div align='right'>
+                            <strong>قضاء:</strong> <span id="district-name-1-arabic"></span>
+                        </div>
+                        <div align='right'>
+                            <strong>ضيعة:</strong> <span id="village-name-1-arabic"> </span>
+                        </div>
+                    </div>
                 </div>
-                <div align='right'>
-                    <strong>قضاء:</strong> <span id="district-name-1-arabic"></span>
-                </div>
-                <div align='right'>
-                    <strong>ضيعة:</strong> <span id="village-name-1-arabic"> </span>
-                </div>
-                <br>
                 <br>
 
             </div>
