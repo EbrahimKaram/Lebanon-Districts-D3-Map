@@ -48,6 +48,7 @@ for i in range(0, number_of_districts):
         datastore['objects'][name]["geometries"][i]['properties']['Arabic_NAME_3'] =""
     else:
         print(str(str(villagePairs.loc[english_village, 'Arabic Name']).encode('utf-8')))
+    datastore['objects'][name]["geometries"][i]['properties']['id']=i+1
 
 
 

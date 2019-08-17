@@ -29,7 +29,7 @@ for i in range(0, number_of_districts):
     english_district = datastore['objects'][name]["geometries"][i]['properties']['NAME_2']
     print(english_district)
     datastore['objects'][name]["geometries"][i]['properties']['Arabic_NAME_2'] = districtPairs.loc[english_district, 'Column1']
-    print(districtPairs.loc[english_district, 'Column1'])
+    print(districtPairs.loc[english_district, 'Column1'].encode('utf-8'))
 
 
 with codecs.open(filename, 'w', "utf-8") as write_file:
