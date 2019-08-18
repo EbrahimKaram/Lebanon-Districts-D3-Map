@@ -180,6 +180,20 @@ d3.json("Lebanon_Level3.json", function (error, leb) {
             d3.select("#tooltip").selectAll(".villageEntry").classed("hidden", false);
             d3.select("#tooltip").selectAll(".districtEntry").classed("hidden", false);
         })
+//    TODO: Need to open a new tab to edit the details of the element presented
+        .on('click', function (d) {
+            console.log(d.properties.id);
+            console.log(d.properties.NAME_1);
+            console.log(d.properties.NAME_2);
+            console.log(d.properties.NAME_3);
+            
+            console.log(d.properties.Arabic_NAME_1);
+            console.log(d.properties.Arabic_NAME_2);
+            console.log(d.properties.Arabic_NAME_3);
+        // Reference: https://stackoverflow.com/questions/87359/can-i-pass-a-javascript-variable-to-another-browser-window
+        
+            
+        })
 
         // Hide tooltip when user stops hovering over map
         .on("mouseout", function () {
