@@ -90,13 +90,14 @@ var path1 = d3.geo.path()
 var features1 = svg1.append("g");
 
 
+
 //Load TopoJSON data
 d3.json("Lebanon_Level3.json", function (error, leb) {
 
     if (error) return console.error(error);
 
     var subunits1 = topojson.feature(leb, leb.objects.gadm36_LBN_3);
-
+    var districtAreas;
     // Bind data and create one path per TopoJSON feature
     features1.selectAll("path")
         .data(topojson.feature(leb, leb.objects.gadm36_LBN_3).features)
@@ -123,8 +124,8 @@ d3.json("Lebanon_Level3.json", function (error, leb) {
         .on("mousemove", function (d) {
 
             var district = d.properties.NAME_2.replace(/\s/g, '');
-
-            d3.selectAll("path[district=" + district + "]").attr("fill", "#ffffff");
+            districtAreas = d3.selectAll("path[district=" + district + "]");
+            districtAreas.attr("fill", "#ffffff");
 
             //Update the tooltip position and value
             d3.select("#tooltip")
@@ -182,7 +183,7 @@ d3.json("Lebanon_Level3.json", function (error, leb) {
 
         // Hide tooltip when user stops hovering over map
         .on("mouseout", function () {
-            d3.selectAll("path").attr("fill", "#e8d8c3");
+            districtAreas.attr("fill", "#e8d8c3");
             d3.select("#tooltip").classed("hidden", true);
             d3.select("#tooltip").selectAll(".villageEntry").classed("hidden", true);
             d3.select("#tooltip").selectAll(".districtEntry").classed("hidden", false);
