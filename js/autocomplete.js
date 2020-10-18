@@ -102,13 +102,13 @@ function autocomplete(inp, arr) {
 
 function highlight() {
     var villageSearched = document.getElementById("myInput").value.replace(/\s/g, '');
-    
+
     var district = d3.selectAll("path[village=" + villageSearched + "]").attr("district");
     var governorate = d3.selectAll("path[village=" + villageSearched + "]").attr("mohafaza");
 
     d3.selectAll("path[district=" + district + "]").attr("fill", "#ffffff");
     d3.selectAll("path[village=" + villageSearched + "]").attr("fill", "#72716c");
-    
+
     d3.select('#governorate-name-1')
         .text(governorate);
 
@@ -117,6 +117,16 @@ function highlight() {
 
     d3.select('#village-name-1').
     text(document.getElementById("myInput").value);
+
+    d3.select('#district-name-1-arabic')
+        .text(d3.selectAll("path[village=" + villageSearched + "]").attr("arabic_district"));
+
+
+    d3.select('#governorate-name-1-arabic')
+        .text(d3.selectAll("path[village=" + villageSearched + "]").attr("arabic_mohafaza"));
+
+    d3.select('#village-name-1-arabic')
+        .text(d3.selectAll("path[village=" + villageSearched + "]").attr("arabic_village"));
 }
 
 /*An array containing all the country names in the world:*/
