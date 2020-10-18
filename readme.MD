@@ -36,6 +36,11 @@ The tooltip would show the name of the Village, the name of the district it is a
 ## Acknowledgments
 I would like to give credit [CodeWritingCow](https://github.com/CodeWritingCow) for making his [D3.js map of Syria repository](https://github.com/CodeWritingCow/d3-js-maps-syria-districts) public making the development of this repository much easier.
 
+## The Arbic _ Latin pairing of the villages
+This the first GEO JSON  of lebanon with english and arabic names embedded. This has proven to be more difficult than expected and I dedicated a specific repo to it. 
+[Lebanese-Villages-List Repository](https://github.com/EbrahimKaram/Lebanese-Villages-List)
+I'm a bit lost on how to match the rest of the villages. I'm open to ideas and suggestions there. The ReadMe on that repositry would tell you what I have already tried. 
+
 ## Further Info
 
 Please feel free to submit any issues, star the repository, and fork it for your personal projects. I'm putting this project under an MIT open License to encourage as many projects as possible for whatever purpose they serve. I'm also available on twitter at @BahoKaram
