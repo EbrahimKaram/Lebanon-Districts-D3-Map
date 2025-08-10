@@ -100,10 +100,14 @@ d3.json("Lebanon_Level3.json").then(data => {
             // Show tooltip
             d3.select("#tooltip").classed("hidden", false);
             d3.select("#tooltip").selectAll(".districtEntry").classed("hidden", false);
+            d3.select("#tooltip").selectAll(".villageEntry").classed("hidden", false);
         })
         .on("mouseout", () => {
             d3.select("#tooltip").classed("hidden", true);
             villFeatures.selectAll("path").attr("fill", "#e6f4d8");
+
+            d3.select("#tooltip").selectAll(".districtEntry").classed("hidden", true);
+            d3.select("#tooltip").selectAll(".villageEntry").classed("hidden", true);
         });
 
 
