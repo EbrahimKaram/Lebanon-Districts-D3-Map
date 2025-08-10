@@ -1,169 +1,82 @@
-var margin = {
-        top: 10,
-        left: 10,
-        bottom: 10,
-        right: 10
-    },
-    width = parseInt(d3.select('#villages').style('width')),
-    width = width - margin.left - margin.right,
-    mapRatio = 0.6,
-    height = width * mapRatio,
-    mapRatioAdjuster = 15; // adjust map ratio here without changing map container size.
-syria_center = [35.1026268, 33.9]; // Syria's geographical center
+const villMargin = { top: 10, left: 10, bottom: 10, right: 10 };
+let villWidth = parseInt(d3.select('#villages').style('width')) - villMargin.left - villMargin.right;
+const villMapRatio = 0.6;
+let villHeight = villWidth * villMapRatio;
+const villScaleAdjuster = 15;
+const villCenter = [35.86, 33.9];
 
-//Define map projection
-var projection1 = d3.geo.mercator()
-    .center(syria_center) // sets map center to Syria's center
-    .translate([width / 2, height / 2])
-    .scale(width * [mapRatio + mapRatioAdjuster]);
+const villProjection = d3.geoMercator()
+    .center(villCenter)
+    .translate([villWidth / 2, villHeight / 2])
+    .scale(villWidth * (villMapRatio + villScaleAdjuster));
 
-// adjust map size when browser window size changes
-function resize() {
-    width = parseInt(d3.select('#villages').style('width'));
-    width = width - margin.left - margin.right;
-    height = width * mapRatio;
+const villPath = d3.geoPath().projection(villProjection);
 
-    // update projection
-    projection1.translate([width / 2, height / 2])
-        .center(syria_center)
-        .scale(width * [mapRatio + mapRatioAdjuster]);
+const villZoom = d3.zoom()
+    .scaleExtent([1, 15])
+    .on("zoom", villZoomed);
 
-    // resize map container
-    svg1.style('width', width + 'px')
-        .style('height', height + 'px');
-
-    // resize map
-    svg1.selectAll("path").attr('d', path1);
-
-    //For the second map
-    projection.translate([width / 2, height / 2])
-        .center(syria_center)
-        .scale(width * [mapRatio + mapRatioAdjuster]);
-
-    // resize map container
-    svg.style('width', width + 'px')
-        .style('height', height + 'px');
-
-    // resize map
-    svg.selectAll("path").attr('d', path);
-
-    /////For the first map [mohafaza]
-    projection2.translate([width / 2, height / 2])
-        .center(syria_center)
-        .scale(width * [mapRatio + mapRatioAdjuster]);
-
-    // resize map container
-    svg2.style('width', width + 'px')
-        .style('height', height + 'px');
-
-    // resize map
-    svg2.selectAll("path").attr('d', path);
-}
-
-// adds zoom function to map
-var zoom1 = d3.behavior.zoom()
-    .translate([0, 0])
-    .scale(1)
-    .scaleExtent([1, 25]) // defines how far users can zoom in and out
-    .on("zoom", zoomed);
-
-// zoom function. allows users to zoom in and out of map
-function zoomed() {
-    features1.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-}
-
-// when window size changes, resize the map
-d3.select(window).on('resize', resize);
-
-// create SVG element
-var svg1 = d3.select("#villages")
+const villSvg = d3.select("#villages")
     .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .call(zoom1); //Call zoom function on map
+    .attr("width", villWidth)
+    .attr("height", villHeight)
+    .call(villZoom);
 
-//Define path generator
-var path1 = d3.geo.path()
-    .projection(projection1);
+const villFeatures = villSvg.append("g");
 
-//Group SVG elements together
-var features1 = svg1.append("g");
+function villResize() {
+    villWidth = parseInt(d3.select('#villages').style('width')) - villMargin.left - villMargin.right;
+    villHeight = villWidth * villMapRatio;
+
+    villProjection
+        .translate([villWidth / 2, villHeight / 2])
+        .center(villCenter)
+        .scale(villWidth * (villMapRatio + villScaleAdjuster));
+
+    villSvg.attr("width", villWidth).attr("height", villHeight);
+    villFeatures.selectAll("path").attr("d", villPath);
+}
+
+function villZoomed(event) {
+    villFeatures.attr("transform", event.transform);
+}
+
+d3.select(window).on('resize.villages', villResize);
+
+d3.json("Lebanon_Level3.json").then(data => {
+    const subunits = topojson.feature(data, data.objects.gadm36_LBN_3);
+
+    villFeatures.selectAll("path")
+        .data(subunits.features)
+        .enter().append("path")
+        .attr("d", villPath)
+        .attr("fill", "#e6f4d8")
+        .attr("stroke", "#222")
+        .attr("stroke-width", 0.3)
+        .on("mousemove", (event, d) => {
 
 
+            // Store original color for reset
+            const baseFill = "#e6f4d8";
 
-//Load TopoJSON data
-d3.json("Lebanon_Level3.json", function (error, leb) {
+            // // Reset all fills to base color first
+            // villFeatures.selectAll("path").attr("fill", baseFill);
 
-    if (error) return console.error(error);
-
-    var subunits1 = topojson.feature(leb, leb.objects.gadm36_LBN_3);
-    var districtAreas;
-    // Bind data and create one path per TopoJSON feature
-    features1.selectAll("path")
-        .data(topojson.feature(leb, leb.objects.gadm36_LBN_3).features)
-        .enter()
-        .append("path")
-        //Added An ID for each in order to search for them later
-        .attr("mohafaza", function (d) {
-            return d.properties.NAME_1.replace(/\s/g, '');
-        })
-        .attr("arabic_mohafaza", function (d) {
-            return d.properties.Arabic_NAME_1;
-        })
-        .attr("district", function (d) {
-            return d.properties.NAME_2.replace(/\s/g, '');
-        })
-        .attr("arabic_district", function (d) {
-            return d.properties.Arabic_NAME_2;
-        })
-        .attr("village", function (d) {
-            return d.properties.NAME_3.replace(/\s/g, '');
-        })
-        .attr("arabic_village", function (d) {
-            return d.properties.Arabic_NAME_3;
-        })
-        .attr("d", path)
-
-        // Sets colors of fill and stroke for each district. Sets stroke width, too.
-        .attr("fill", "#e8d8c3")
-        .attr("stroke", "#404040")
-        .attr("stroke-width", .3)
-
-        // Update tooltip and info boxes when user hovers over a district on map
-        .on("mousemove", function (d) {
-
-            var district = d.properties.NAME_2.replace(/\s/g, '');
-            districtAreas = d3.selectAll("path[district=" + district + "]");
-            districtAreas.attr("fill", "#ffffff");
-
-            //Update the tooltip position and value
-            d3.select("#tooltip")
-                .style("top", (d3.event.pageY) + 20 + "px")
-                .style("left", (d3.event.pageX) + 20 + "px")
-
-                // update governorate name
-                .select('#governorate')
-                .text(d.properties.NAME_1);
-
-            // update district name
-            d3.select("#tooltip")
-                .select("#district")
-                .text(d.properties.NAME_2);
-
+            const currentDistrict = d.properties.NAME_2;
+            villFeatures.selectAll("path")
+                .attr("fill", v => v.properties.NAME_2 === currentDistrict ? "white" : baseFill);
 
             d3.select("#tooltip")
-                .select("#village")
-                .text(d.properties.NAME_3);
+                .style("top", (event.pageY + 20) + "px")
+                .style("left", (event.pageX + 20) + "px")
+                .select("#governorate").text(d.properties.NAME_1);
 
-            d3.select("#tooltip").select('#governorate-arabic')
-                .text(d.properties.Arabic_NAME_1);
+            d3.select("#tooltip").select("#governorate-arabic").text(d.properties.Arabic_NAME_1);
+            d3.select("#tooltip").select("#district").text(d.properties.NAME_2);
+            d3.select("#tooltip").select("#district-arabic").text(d.properties.Arabic_NAME_2);
+            d3.select("#tooltip").select("#village").text(d.properties.NAME_3);
+            d3.select("#tooltip").select("#village-arabic").text(d.properties.Arabic_NAME_3);
 
-            d3.select("#tooltip")
-                .select("#district-arabic")
-                .text(d.properties.Arabic_NAME_2);
-
-            d3.select("#tooltip").select("#village-arabic")
-                .text(d.properties.Arabic_NAME_3);
 
             // Update province and district names in info box
             d3.select('#governorate-name-1')
@@ -179,36 +92,19 @@ d3.json("Lebanon_Level3.json", function (error, leb) {
                 .text(d.properties.Arabic_NAME_2);
 
             d3.select('#village-name-1').
-            text(d.properties.NAME_3);
+                text(d.properties.NAME_3);
 
             d3.select('#village-name-1-arabic').
-            text(d.properties.Arabic_NAME_3);
+                text(d.properties.Arabic_NAME_3);
 
             // Show tooltip
             d3.select("#tooltip").classed("hidden", false);
-            d3.select("#tooltip").selectAll(".villageEntry").classed("hidden", false);
             d3.select("#tooltip").selectAll(".districtEntry").classed("hidden", false);
         })
-        //    TODO: Need to open a new tab to edit the details of the element presented
-        .on('click', function (d) {
-            console.log(d.properties.id);
-            console.log(d.properties.NAME_1);
-            console.log(d.properties.NAME_2);
-            console.log(d.properties.NAME_3);
-
-            console.log(d.properties.Arabic_NAME_1);
-            console.log(d.properties.Arabic_NAME_2);
-            console.log(d.properties.Arabic_NAME_3);
-            // Reference: https://stackoverflow.com/questions/87359/can-i-pass-a-javascript-variable-to-another-browser-window
-
-
-        })
-
-        // Hide tooltip when user stops hovering over map
-        .on("mouseout", function () {
-            districtAreas.attr("fill", "#e8d8c3");
+        .on("mouseout", () => {
             d3.select("#tooltip").classed("hidden", true);
-            d3.select("#tooltip").selectAll(".villageEntry").classed("hidden", true);
-            d3.select("#tooltip").selectAll(".districtEntry").classed("hidden", false);
+            villFeatures.selectAll("path").attr("fill", "#e6f4d8");
         });
+
+
 });
