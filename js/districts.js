@@ -81,7 +81,6 @@ d3.json("Lebanon_Level2.json").then(data => {
         })
         .on("mouseout", () => {
             d3.select("#tooltip").classed("hidden", true);
-
-      
+            d3.select("#tooltip").selectAll(".districtEntry").classed("hidden", true);
         });
 });
