@@ -1,120 +1,85 @@
 
-
 function autocomplete(inp, arr, callback) {
-  let currentFocus;
+    let currentFocus;
 
-  inp.addEventListener("input", function () {
-    const val = this.value.trim().toLowerCase();
-    closeAllLists();
-
-    if (!val) return false;
-    currentFocus = -1;
-
-    const listDiv = document.createElement("DIV");
-    listDiv.setAttribute("id", this.id + "autocomplete-list");
-    listDiv.setAttribute("class", "autocomplete-items");
-    this.parentNode.appendChild(listDiv);
-
-    // Improved matching: substring, case-insensitive, ranked
-    let matches = arr.filter(item => item.toLowerCase().includes(val));
-    matches.sort((a, b) => {
-      const ai = a.toLowerCase().indexOf(val);
-      const bi = b.toLowerCase().indexOf(val);
-      return ai - bi; // earlier matches first
-    });
-
-    matches.forEach(item => {
-      const itemDiv = document.createElement("DIV");
-      const idx = item.toLowerCase().indexOf(val);
-      // Highlight matched part
-      if (idx >= 0) {
-        itemDiv.innerHTML =
-          item.substr(0, idx) +
-          "<strong>" + item.substr(idx, val.length) + "</strong>" +
-          item.substr(idx + val.length);
-      } else {
-        itemDiv.innerHTML = item;
-      }
-      itemDiv.innerHTML += "<input type='hidden' value='" + item + "'>";
-      itemDiv.addEventListener("click", function () {
-        inp.value = this.getElementsByTagName("input")[0].value;
+    inp.addEventListener("input", function () {
+        const val = this.value.trim().toLowerCase();
         closeAllLists();
-        if (callback) callback(inp.value);
-      });
-      listDiv.appendChild(itemDiv);
+
+        if (!val) return false;
+        currentFocus = -1;
+
+        const listDiv = document.createElement("DIV");
+        listDiv.setAttribute("id", this.id + "autocomplete-list");
+        listDiv.setAttribute("class", "autocomplete-items");
+        this.parentNode.appendChild(listDiv);
+
+        // Improved matching: substring, case-insensitive, ranked
+        let matches = arr.filter(item => item.toLowerCase().includes(val));
+        matches.sort((a, b) => {
+            const ai = a.toLowerCase().indexOf(val);
+            const bi = b.toLowerCase().indexOf(val);
+            return ai - bi; // earlier matches first
+        });
+
+        matches.forEach(item => {
+            const itemDiv = document.createElement("DIV");
+            const idx = item.toLowerCase().indexOf(val);
+            // Highlight matched part
+            if (idx >= 0) {
+                itemDiv.innerHTML =
+                    item.substr(0, idx) +
+                    "<strong>" + item.substr(idx, val.length) + "</strong>" +
+                    item.substr(idx + val.length);
+            } else {
+                itemDiv.innerHTML = item;
+            }
+            itemDiv.innerHTML += "<input type='hidden' value='" + item + "'>";
+            itemDiv.addEventListener("click", function () {
+                inp.value = this.getElementsByTagName("input")[0].value;
+                closeAllLists();
+                if (callback) callback(inp.value);
+            });
+            listDiv.appendChild(itemDiv);
+        });
     });
-  });
 
-  inp.addEventListener("keydown", function (e) {
-    let list = document.getElementById(this.id + "autocomplete-list");
-    if (list) list = list.getElementsByTagName("div");
-    if (e.keyCode == 40) { // arrow down
-      currentFocus++;
-      addActive(list);
-    } else if (e.keyCode == 38) { // arrow up
-      currentFocus--;
-      addActive(list);
-    } else if (e.keyCode == 13) { // enter
-      e.preventDefault();
-      if (currentFocus > -1 && list) list[currentFocus].click();
+    inp.addEventListener("keydown", function (e) {
+        let list = document.getElementById(this.id + "autocomplete-list");
+        if (list) list = list.getElementsByTagName("div");
+        if (e.keyCode == 40) { // arrow down
+            currentFocus++;
+            addActive(list);
+        } else if (e.keyCode == 38) { // arrow up
+            currentFocus--;
+            addActive(list);
+        } else if (e.keyCode == 13) { // enter
+            e.preventDefault();
+            if (currentFocus > -1 && list) list[currentFocus].click();
+        }
+    });
+
+    function addActive(list) {
+        if (!list) return false;
+        removeActive(list);
+        if (currentFocus >= list.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = list.length - 1;
+        list[currentFocus].classList.add("autocomplete-active");
     }
-  });
 
-  function addActive(list) {
-    if (!list) return false;
-    removeActive(list);
-    if (currentFocus >= list.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = list.length - 1;
-    list[currentFocus].classList.add("autocomplete-active");
-  }
-
-  function removeActive(list) {
-    for (let i = 0; i < list.length; i++) list[i].classList.remove("autocomplete-active");
-  }
-
-  function closeAllLists(elmnt) {
-    const items = document.getElementsByClassName("autocomplete-items");
-    for (let i = 0; i < items.length; i++) {
-      if (elmnt != items[i] && elmnt != inp) items[i].parentNode.removeChild(items[i]);
+    function removeActive(list) {
+        for (let i = 0; i < list.length; i++) list[i].classList.remove("autocomplete-active");
     }
-  }
 
-  document.addEventListener("click", function (e) {
-    closeAllLists(e.target);
-  });
+    function closeAllLists(elmnt) {
+        const items = document.getElementsByClassName("autocomplete-items");
+        for (let i = 0; i < items.length; i++) {
+            if (elmnt != items[i] && elmnt != inp) items[i].parentNode.removeChild(items[i]);
+        }
+    }
+
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
+
 }
-
-function highlight() {
-    var villageSearched = document.getElementById("myInput").value.replace(/\s/g, '');
-
-    var district = d3.selectAll("path[village=" + villageSearched + "]").attr("district");
-    var governorate = d3.selectAll("path[village=" + villageSearched + "]").attr("mohafaza");
-
-    d3.selectAll("path[district=" + district + "]").attr("fill", "#ffffff");
-    d3.selectAll("path[village=" + villageSearched + "]").attr("fill", "#72716c");
-
-    d3.select('#governorate-name-1')
-        .text(governorate);
-
-    d3.select('#district-name-1')
-        .text(district);
-
-    d3.select('#village-name-1').
-    text(document.getElementById("myInput").value);
-
-    d3.select('#district-name-1-arabic')
-        .text(d3.selectAll("path[village=" + villageSearched + "]").attr("arabic_district"));
-
-
-    d3.select('#governorate-name-1-arabic')
-        .text(d3.selectAll("path[village=" + villageSearched + "]").attr("arabic_mohafaza"));
-
-    d3.select('#village-name-1-arabic')
-        .text(d3.selectAll("path[village=" + villageSearched + "]").attr("arabic_village"));
-}
-
-/*An array containing all the country names in the world:*/
-var villages = ["Aadoua", "Aaiyé", "Aaouainat", "Aassaymout", "Aba", "Abba", "Abbassyat", "Abdilli", "Abdine", "Abey", "Ablah", "Abou Chech", "Abou Kamha", "Abou-Mizane", "Abra", "Abrine", "Acheiche", "Achkoute", "Achrafieh", "Adchite", "Adchite El-Koussair", "Addous", "Addoussiat", "Adeicé", "Adloun", "Adma-Defneh", "Adonis et Sannour", "Afka", "Afsdik", "Aghmide", "Aidamoun shikhlar", "Ain Aarab", "Ain Saideh", "Ain el-Mreissé", "Ajeltoun", "Akabé", "Akkar El-Atika", "Akmata", "Akoura", "Akroum", "Aktanite", "Al Kattara", "Al Moghrak", "Al-Abboudié", "Al-Ali-Nahri", "Al-Amara", "Al-Aïne", "Al-Beddaoui", "Al-Boukaia", "Al-Boukaïa et Dahr Abi Yaghi", "Al-Dellafé", "Al-Djeziré", "Al-Fakiat", "Al-Harik", "Al-Hery", "Al-Hissa", "Al-Hraïché", "Al-Istable", "Al-Jdeidé", "Al-Jédidé", "Al-Kalmoune", "Al-Khaldyé", "Al-Kharayeb", "Al-Kharnoubé", "Al-Khiara", "Al-Khodré", "Al-Khraibé", "Al-Khraibé (Kousha)", "Al-Kleiat", "Al-Kneissé", "Al-Labouat", "Al-Marje", "Al-Massoudié", "Al-Mazraa", "Al-Mehamra", "Al-Mina Jardins", "Al-Mina No1", "Al-Mina No2", "Al-Mina No3", "Al-Minieh", "Al-Moukaiteh", "Al-Mouzeihmé", "Al-Nabi Aïla", "Al-Nabi Chite", "Al-Nabi Osman", "Al-Nasriyé", "Al-Qa Bayoun", "Al-Qa El-Benjakie", "Al-Qa Jouar Mekie", "Al-Qa Wadi El-Khanzir", "Al-Rihanié", "Al-Rihanié", "Al-Roumoul", "Al-Sammounié", "Al-Sawiré", "Al-Saïdat", "Al-Semmakié", "Al-Semmakli", "Al-Sfiré", "Al-Souaissé", "Al-Taybat", "Al-Taïbé", "Al-Wakf", "Al-Zoureiribe", "Aley", "Ali El-Taher", "Alita", "Alma", "Alma Chaab", "Almane", "Almane", "Almate El-Chemaliat", "Almate El-Jenoubiat", "Amchite", "Amioune", "Ammatour", "Ammik", "Ammik et Jouret Ammik", "Ana", "Anane", "Anbal", "Andeket", "Anjar", "Ankoune", "Anoute", "Ansar", "Ansariyé", "Antoura", "Antélias", "Arab El-Haibe", "Arab Salim", "Arab Soukar", "Arab Tabbaya", "Arab-el-Jal", "Aramoun", "Aramoun", "Aramté", "Araya", "Arbet Koshaya", "Ardate", "Ardé", "Argesse", "Arida", "Ariya", "Arka", "Arkoub (Mazraat)", "Arké", "Arnoune", "Arsale", "Arsoune", "Artiz", "Arzey", "Arzoune", "Asnoune", "Assia", "Assoun", "Atrine", "Azka", "Azour", "Aïchiyé", "Aïha", "Aïn -El-Zeitouné", "Aïn Aar", "Aïn Aata", "Aïn Abou Abdallah", "Aïn Akrine", "Aïn Arab", "Aïn Baal", "Aïn Bourday", "Aïn Drafile", "Aïn El-Beniyé", "Aïn El-Delbé", "Aïn El-Halzoune", "Aïn El-Jaouzé", "Aïn El-Kabou", "Aïn El-Rihané", "Aïn El-Zeit", "Aïn Horché", "Aïn Jarfa", "Aïn Kfah", "Aïn Kfar Zabed", "Aïn Kinia", "Aïn Ksour", "Aïn Kéni", "Aïn Mouaffak", "Aïn Ouzaï", "Aïn Sofar", "Aïn Séa et Chadourah", "Aïn Tanta", "Aïn Traz", "Aïn Zhalta", "Aïn el-Mir", "Aïn-Alak", "Aïn-Boussouar", "Aïn-Dara", "Aïn-Ebel", "Aïn-El-Ghouaibé", "Aïn-El-Jdeidé", "Aïn-El-Kach", "Aïn-El-Kharroubé", "Aïn-El-Safsaf", "Aïn-El-Sindiané", "Aïn-El-Tiné", "Aïn-Enoub", "Aïn-Jraïne", "Aïn-Kana", "Aïn-Rommané", "Aïn-Saâdé", "Aïn-Yacoub", "Aïn-Zebdé", "Aïn-el-Assad et Chmeicé", "Aïn-el-Delbé", "Aïn-el-Dib", "Aïn-el-Katmoune", "Aïn-el-Teffaha", "Aïn-el-Tiné", "Aïnab", "Aïnata", "Aïnata", "Aïntoura", "Aïntourine", "Aïroune", "Aïta El-Fokhar", "Aïta-el-Chaab", "Aïta-el-Zut", "Aïtanit", "Aïtaroun", "Aïtate", "Aïtite", "Aïto", "Baabda", "Baabdat et Sfaïlé", "Baadarane", "Baakline", "Baalbek", "Baalchemay", "Baaloul", "Baassir", "Bab Mareh", "Baba", "Babliyé", "Bachoura", "Bachtlida", "Bachwat", "Badbhoun", "Bafliyé", "Baissour", "Bait Chama", "Bakhaase", "Bakhoune", "Bakka", "Bakkifa", "Ballouné", "Bane", "Bani Haiyane", "Baouarta", "Baouchariat", "Bar-Elias", "Baraachite", "Barbara", "Barcha", "Bargoune", "Barja", "Barka", "Barsa", "Basbina", "Baskinta", "Basloukite", "Bater", "Batha", "Batloune", "Batouliyat", "Batroune", "Bazbina", "Bazoune", "Bazouriat", "Bazyoune", "Baïkoun", "Baïssour", "Bchaalé", "Bchamoune", "Bcharré", "Bchatfine", "Bchenine", "Bchillé", "Bchnnata", "Bdebba", "Bdédoune", "Bebnine", "Bechhara", "Bechmezzine", "Bechtoudar-Aoura", "Bedghane", "Bednayel", "Bednayel", "Behdaidate", "Behweité", "Beino", "Beiriche", "Beirut Central District", "Beit Ayoub", "Beit Chebab", "Beit Chlale", "Beit Eddine", "Beit El Koukou", "Beit Habbak", "Beit Haouik", "Beit Ksab", "Beit Lahia", "Beit Lif", "Beit Mallat", "Beit Menzer", "Beit Mery", "Beit Yahoune", "Beit Younes", "Beit Zaoud", "Beit-El-Faks", "Beit-El-Haouche", "Beit-Ghattas", "Beitroumine", "Bejdarfel", "Bejjé", "Bekaatet Kénaan", "Bekaatet-Achkoute", "Bekaatouta", "Belhos", "Belmand", "Benachée", "Benouaïti", "Benwati", "Berhalioun", "Berkayel", "Berket Hejoula", "Berti", "Bestiace", "Bezhel", "Bfarwé", "Bhabbouche", "Bhamdoun (Gare)", "Bhamdoun (Village)", "Bhanine", "Bhouara", "Biakoute", "Bidias", "Bikaa kafra", "Bikfaya", "Billa", "Bint Jbail", "Bintaél (Fdar-El-Soufla)", "Bisri", "Bisrine", "Bissariat", "Bkaa Safrine", "Bkarkacha", "Bkarsouna", "Bkarzala", "Bkeftine", "Bkennaya", "Bkessine", "Bkhchtaine", "Bkhichtay", "Bkifa", "Blaouza", "Blat", "Blat", "Bleibel", "Blida", "Bmakkine", "Bmariam", "Bmehraï", "Bnaafoul", "Bnehrane", "Boksmaya", "Bordje Rahhal", "Borge El-Chémali", "Borge Hammoud", "Borge Kalaouiyé", "Borge el Baragenat", "Borge-El-Yahoudié", "Botmé", "Boucite", "Bouday", "Bouerije", "Bouhairet Toula", "Boukak El-Dine", "Bouslaya", "Boustane", "Boutchay", "Bouzridé", "Bqosta", "Braikeh", "Bramiat", "Breige", "Brih et Mteilé", "Brissat", "Brital", "Broummana", "Bsaba", "Bsaba Wadi Dlab", "Bsalime", "Bsarma", "Bsebhil", "Bsifrine et El-Zahriyé", "Bsous", "Btaaboura", "Btallaoun", "Btater", "Btaychiyé", "Btebiat", "Bteddine El-Lekche", "Bteezanieh", "Bteghrine", "Btehline", "Btekhnay", "Btermaz", "Bterram", "Btouratige", "Btédy", "Burghoz", "Bzal", "Bzebdine", "Bziza", "Bzoumar", "Chaat", "Chabaaa", "Chabil", "Chabtine", "Chahtoul", "Chakdouf", "Chakra", "Chamate", "Chameh", "Chamlane", "Chanay", "Chane", "Chaouié, Knaitré et Mar gergesse Bhurdok", "Charbila", "Charoun", "Chartoun", "Chatine", "Chawalik", "Chaïbé", "Chbaniyeh", "Chebaa Farms", "Chehime", "Chehour", "Cheikh Mohamed", "Cheikh Taba Montagne", "Cheikh Taba Plaine", "Cheikh Zennad Tal Bibé", "Cheir Homeirine", "Chekka", "Chemaarine", "Chemistar", "Chenanhir", "Cheïetiyé", "Chiah", "Chihine", "Chikhane", "Chikhlar", "Chlifa", "Chmout", "Chouaifat Amroussyat", "Chouaifat Oumara", "Chouaifat Qobbat", "Chouaya", "Chouaya", "Chouberkié  Tabet", "Chouberkié Ammik", "Choueir", "Chouit", "Choukine", "Chouma", "Chourite", "Chrine", "Chtaura", "Conflict", "Conflict", "Conflict", "Conflict", "Couvent St Maron", "Dabbabiyé Charkié", "Dael", "Dahr El Souwan", "Dahr El-Ahmar", "Dahr El-Mghara", "Dahr Haddara", "Dahr el-Kneissé", "Dahr-Leyciné", "Dair El-Ahmar", "Dair Tahmiche", "Dair-el-Ghazel", "Dakkoun", "Dakoué", "Dalhoune", "Damour", "Danbou", "Danhi", "Daoucé et Baghdadi", "Daoudiyé", "Daoura", "Dar Bechtar", "Dar Bella", "Dar Chmezzine", "Dar El-Ouassia", "Daraoun", "Daraya", "Daraya", "Daraya", "Darbessim", "Dardourite", "Dayret Nahr El-Kébir", "Dbayé", "Debaael", "Debbiyeh", "Debbiyeh (Ain el Haour)", "Debel", "Debhalé", "Deir  El-Moukhalles Ech-Chouf", "Deir Amess", "Deir Baba", "Deir Baklouche", "Deir Chamra", "Deir Couché", "Deir El-Achayer", "Deir El-Harf", "Deir El-Kamar", "Deir El-Zehrani", "Deir Kanoun El-Nahr", "Deir Kanoun Ras El Aïn", "Deir Kfifane", "Deir Khouna", "Deir Kifa", "Deir Mar Sarkis", "Deir Mar Youhanna Douma", "Deir Mar Youssef Jrabta", "Deir Mimas", "Deir Mimas Doumiat", "Deir Nebouh", "Deir Ntar", "Deir Omar", "Deir Sériane", "Deir Takla", "Deir Tamiche", "Deir-Aïn-el-Jaouzé", "Deir-Daloum", "Deir-Janine", "Deir-Koubel", "Deirine", "Dekouanet", "Delhamié", "Denké et El-Amriyeh", "Derdaghaya", "Deria", "Dfoun", "Dibbine", "Dik El-Mehdi", "Djezzine", "Djounié Ghadir", "Djounié Salel Alma", "Djounié Sarba", "Dlebta", "Dmite", "Douair", "Douair Adouiyé", "Douair Bsennaï", "Douair El-Roummane", "Douar", "Douk", "Douma", "Douress", "Déddé", "EL-Azouniyeh", "EL-Khiam", "EL-Safra", "Ebel-El-Saki", "Edbel", "Eddé", "Eddé", "Eghbeh", "Ehden", "Ehmège", "Ejbeh", "Ejdabra", "Ejdabrine", "El Freiké", "El Halaliyeh", "El Hartiyé", "El Jbine", "El Jiyeh", "El Mtein", "El- Mery", "El-Abadiyeh", "El-Abri et Chouan", "El-Alaly", "El-Amra", "El-Armeh", "El-Atchané", "El-Azra", "El-Bardé", "El-Barouk", "El-Bennayé", "El-Berbara", "El-Berjaine", "El-Biré", "El-Biré", "El-Biré", "El-Biyad", "El-Bkaya", "El-Borge", "El-Bouar", "El-Charkiyé", "El-Chmeice", "El-Daghlé", "El-Dechouniyeh", "El-Demachkiyeh", "El-Dimane", "El-Dleibé", "El-Ekaïbé", "El-Erbaniyeh", "El-Fouara", "El-Fraïdice", "El-Freidice", "El-Fsaïkine", "El-Ftahat", "El-Ghabbatieh", "El-Ghaboun", "El-Ghozaili", "El-Ghuiné", "El-Habbariyé", "El-Hajjé", "El-Hamra", "El-Haouchab", "El-Harf", "El-Hazmieh", "El-Hed", "El-Henniyé", "El-Homsiyé", "El-Hossein", "El-Houaïche", "El-Hsoune", "El-Husseiniyé", "El-Héloussiyé", "El-Jahliyeh", "El-Jarmak", "El-Jdeidé", "El-Jlaicé", "El-Jleiliyeh", "El-Jouar", "El-Kabeh", "El-Kafr et El-Harf", "El-Kahalé", "El-Kahlouat", "El-Kahlouniyeh", "El-Kalaa", "El-Kamatiyeh", "El-Kantara", "El-Karaoun", "El-Karkaf", "El-Kfeir", "El-Kfoune", "El-Kfour", "El-Kfour", "El-Khalouat", "El-Kharayeb", "El-Kharbé", "El-Khellé", "El-Kherbeh", "El-Khounchara", "El-Khreibé", "El-Khreibé", "El-Khreibé", "El-Kleia", "El-Kleilé", "El-Kleiyate", "El-Kneissé", "El-Kneissé", "El-Kneissé", "El-Korné", "El-Kouachra", "El-Koubayet", "El-Kousseir", "El-Kouzah", "El-Krayat", "El-Krayé", "El-Ksaibeh", "El-Laklouk", "El-Louaizé", "El-Maaniyeh", "El-Machera", "El-Mahmoudiyeh", "El-Majidiyé", "El-Maknouniyé", "El-Mansouri", "El-Mansouriyeh", "El-Mansouriyeh et Aïn-El-Marge", "El-Mayassé", "El-Mechrefeh", "El-Mejdel", "El-Merwaniyé", "El-Mghaer", "El-Mghaïré", "El-Mhaidcé", "El-Mhammariyé", "El-Mharbiyé", "El-Midan", "El-Moghaïriyeh", "El-Moghaïré", "El-Mouaïsra", "El-Mouchref", "El-Moukhtara", "El-Mouncef", "El-Mradiyeh", "El-Mreijate", "El-Mrouge", "El-Msallé", "El-Mtaileb", "El-Méaisseri", "El-Nfeicé", "El-Ouyoun", "El-RafidE", "El-Rahbane", "El-Ram", "El-Ramliyeh", "El-Ramout", "El-Rejmeh", "El-Remmané", "El-Rihane", "El-Rihané", "El-Samkanieh", "El-Sfailé", "El-Souané", "El-Taïri", "El-Tellé", "El-Tleil", "El-Wadié", "El-Wardaniyeh", "El-Watié et Harf Siad", "El-Werhaniyeh", "El-Zalka", "El-Zeghrine", "El-Zrariyé", "ElAyoune", "En-Nakhlé", "Enfeh", "Eskandaroun", "Eyoune-El-Ghouzlane", "Falougha", "Fanar", "Faraya", "Farhat", "Fatka", "Fatré et Bir-el-Haït", "Faïtroun", "Fghal", "Fidar", "Fih", "Fneidek", "Forn El-Chobbek", "Fourzol", "Frat", "Freidice", "Froune", "Fseikine et Aïn Achma", "Ghabate", "Ghabet Jaafar", "Ghalboune", "Ghandouriyé", "Gharifé", "Gharzouze", "Ghassaniyé", "Ghazir", "Ghazyat", "Ghazzé", "Ghbayreh", "Ghbélé", "Ghodrace", "Ghorfine", "Ghosta", "Habbouche", "Habchite", "Habil", "Habramoun", "Hadace", "Hadchite", "Haddacé", "Haddet", "Hadeth-el-Jebbé", "Hadtoune", "Haitoulé", "Hakel", "Halane", "Halate", "Halba", "Halbata", "Ham", "Hamara", "Hamat", "Hammana", "Hamoul", "Hanawé", "Hanine", "Haouch el Nabi", "Haouche Al-Sonaid", "Haouche Barada", "Haouche El-Dahab", "Haouche El-Kannabé", "Haouche El-Tal Safyat", "Haouche Hala", "Haouche Kaissar", "Haouche Sayadi", "Haouche el-Rafika", "Haouche-al-Omara (Terres)", "Haouche-el-Ghanam", "Haouche-el-Harimé", "Haql el Aazimé", "Harare", "Harbouna", "Harbta", "Hardine", "Haret -el-Sit", "Haret El-Belleni", "Haret Hamzé", "Haret Horaïk", "Haret Jandal", "Haret Saïda", "Harime-el-Soughra", "Harissa", "Harisse", "Harouf", "Hasbaya", "Hasbaya-el Meten", "Hasroune", "Hasroute", "Hassaniyé", "Hawara", "Hayata", "Haytla", "Hayzouk", "Hazmiyeh", "Haïdab", "Haïtoura", "Hbeline", "Hboub", "Hebouss", "Hedayné", "Hejoula", "Hekr el Dahiri", "Helaliat", "Helta", "Hemlaya", "Herhraya et Kattine", "Hermel", "Hermel Charbine", "Hermel Djebab", "Hermel Zighrine", "Hisraïl", "Hizzerta", "Hizzine", "Hmairé", "Hmais", "Hmaïla", "Hnaïder", "Hochemoche", "Homeira", "Homs et Hama", "Houla", "Houmale", "Houmine El-Tahta", "Houmine-el-Faouka", "Houra", "Hourtala", "Hrajel", "Hsarate et Richkif", "Héloua", "Iate", "Ilate", "Izal", "Izzié", "Izzé", "Iâl", "Jabal Toura", "Jabba", "Jaboulé et Al-Bijage", "Jadra", "Jage", "Jal-el-Dib", "Janine", "Janné", "Jarjouh", "Jarjoura", "Jaroun", "Jaziré", "Jbail", "Jdael et Kfarhi", "Jdeidet Ghazir", "Jditah", "Jebah", "Jebel-El-Batm", "Jebla", "Jebrâil", "Jeddeyel", "Jedeidet-El-Kayteh", "Jeita", "Jejime", "Jennata", "Jensnaya", "Jenta", "Jernaya", "Jib Jénine", "Jmeijmé", "Jmeiliyeh", "Jobchite", "Jodaidat", "Jouar el Haouz", "Jouaya", "Joun", "Jounieh Haret Sakhr", "Jouret Arsoune", "Jouret Bedrane", "Jouret Mhad", "Jouret Srar", "Jouret Termos", "Jouret-El-Ballout", "Jouret-el-Kattine", "Jrabta", "Jrane", "Kaa-el-Rime", "Kaabarine", "Kaakiet El-Senaoubar", "Kaakour", "Kab Elias", "Kabrikha", "Kachlak", "Kafr Dajjal", "Kafr Malka", "Kafr-Falouce", "Kafr-Jarra", "Kafra", "Kafra-Jbah", "Kaftoune", "Kahf-El-Malloul", "Kakiat El-Jisr", "Kalaouiyé", "Kamed-el-Lauze", "Kana", "Kanabet Broummana", "Kanarite", "Kannabet Salima", "Kantara", "Kaoukaba", "Kaoukaba", "Kaoutarite El-Riz", "Kaoutarite El-Siyad", "Karabeiche", "Karem-Asfour-El-Nahrieh", "Karha", "Karkha", "Karm Saddé", "Karnaoun", "Karseita", "Kartaba", "Kartaboune", "Kartada", "Katermaya", "Katrani", "Kattine", "Kattiné", "Katté", "Kaïfoun", "Kaïtoulé", "Kboula", "Kefer Sir", "Kefer-Houné", "Kefr El-Ftouh", "Kefraya", "Kefraya", "Kefraya", "Kefraya", "Kehmez", "Kelhate", "Kernayel", "Kfar Akab", "Kfar Akka", "Kfar Badda", "Kfar Bibnine", "Kfar Chakna", "Kfar Chlane", "Kfar Chleïman", "Kfar Dabache", "Kfar Dalakoss", "Kfar Dinès", "Kfar Fakoud", "Kfar Habou", "Kfar Halda", "Kfar Hamame", "Kfar Haml", "Kfar Haoura", "Kfar Harra", "Kfar Hatna", "Kfar Hatta", "Kfar Hatta", "Kfar Hay", "Kfar Hazir", "Kfar Heloss", "Kfar Kahel", "Kfar Kaouass", "Kfar Katra", "Kfar Kouk", "Kfar Matta", "Kfar Matta (Klaliyé)", "Kfar Mechké", "Kfar Melki", "Kfar Nabrakh", "Kfar Obeida", "Kfar Remmane", "Kfar Saroun", "Kfar Selouane", "Kfar Tebnite", "Kfar Yachite", "Kfar Yassine", "Kfar Zabed", "Kfar Zeina", "Kfar hata", "Kfar-Aammay", "Kfar-Bite", "Kfar-Challal", "Kfar-Keddé", "Kfar-Mashoune et Dmalsa", "Kfarbaal (Annaya)", "Kfarchima", "Kfardan", "Kfardounine", "Kfarfila", "Kfarfou", "Kfarhime", "Kfarkala", "Kfarnice", "Kfarnoune", "Kfarsghab", "Kfartaï", "Kfartun", "Kfertaï", "Kfifane", "Kfour El-Arabi", "Khalsa", "Kharayeb Nahr Ibrahim", "Kharnoub", "Khartoum", "Khazize", "Khellet Khazen", "Kherbet Bassal", "Kherbet Bisri", "Kherbet Char", "Kherbet Daoud", "Kherbet El-Douair", "Kherbet Kanafar", "Kherbet Rouha", "Kherbet Salem", "Khiara-el-Atika", "Khirbet Er Remmane", "Khreibet Aakkar", "Khreibé", "Kloud El-Bakia", "Knaiouer", "Knaissat", "Knate", "Kneissé", "Kobbaï", "Kobbet Bchamra", "Korkraya", "Kornet Chahouane", "Kornet-El-Hamra", "Koubba", "Koueikhat", "Kounine", "Kour", "Kousba", "Koussaya", "Kraya", "Krayé", "Krouh", "Kroum Arabe", "Ksaibé", "Ksara", "Ksarnaba", "Ktalé", "Ktalé", "Kélia", "Lala", "Lassa", "Laylaki", "Lebaa", "Lebbaya", "Lehfed", "Louaizé", "Loubié", "Loucia", "Maad", "Maallaka (Terres)", "Maarab", "Maaraboun", "Maasraïti", "Maasser Beit Eddine", "Maasser el-Chouf", "Maazraat-el-Ramtanieh", "Machghara", "Machha", "Machmouché", "Machta Hammoud", "Machta Hassan", "Maghdouché", "Mahaïlib", "Mahroub", "Maifadoune", "Majdalioun", "Majdalouna", "Majdalzoun", "Majdel", "Majdel", "Majdel Baana", "Majdel Balhice", "Majdel Meouche", "Majdel Selm", "Majdel Tarchiche", "Majdeloun", "Majdla", "Majdoub", "Maksé", "Mandara", "Mansoura", "Maqné", "Mar Abda El-Mchammar", "Mar Boutros Karm El-Tine", "Mar Chaya et Mzakki", "Mar Mama", "Mar Mikhael Bnabil", "Mar Mousa-El-Douar", "Mar Roukose et Dahr El-Hossain", "Mar Touma", "Mardachat", "Marj Ez-Zouhour (Haouch El-Qinnaabé)", "Marjaba", "Markaba", "Markabta", "Marouhine", "Maroune-el-Ras", "Maska et El-Ghabeh", "Masreh", "Massa", "Mastita", "Matriet El-Choumar", "Mayrouba", "Mazboud", "Mazmoura", "Mazraa", "Mazraat Baldé", "Mazraat Dahr el-Deir", "Mazraat Daraya", "Mazraat Dhaira", "Mazraat Ejbeh", "Mazraat El Ouazaaiyé", "Mazraat El-Wasta", "Mazraat Ez-Zalloutieh", "Mazraat Jimjim", "Mazraat Jneide", "Mazraat Ketrane", "Mazraat Louzid (Louayziyé)", "Mazraat Mechref", "Mazraat Torsemhat", "Mazraat el Teffah", "Mazraat el-Mathané", "Mazraat-el-Khreibé", "Mazraet Assaf", "Mazraet Beit Chaar", "Mazraet Beit Mcheik", "Mazraet Bsaffour", "Mazraet Chaal Baal", "Mazraet Deir Aoukar", "Mazraet Dmoul", "Mazraet El-Bayad", "Mazraet El-Chouf", "Mazraet El-Dahr", "Mazraet El-Hadira", "Mazraet El-Krême", "Mazraet El-Nahr", "Mazraet El-Ras", "Mazraet Hreikess", "Mazraet Kalaat Meiss", "Mazraet Kfar Jaouz", "Mazraet Kfardebiane", "Mazraet Matarite Jebah", "Mazraet Mrah el-Mir", "Mazraet Sinai", "Mazraet Yachou", "Mazraet el-Sarada", "Mazraet el-Selasata", "Mazraet-Beni-Saab", "Mazraet-El-Jrein", "Mazraet-El-Kreine", "Mazraet-El-Nahrieh", "Mazraet-el-Mzeiraa", "Mazraet-el-Siyad", "Maïdoune", "Maïfouk", "Mchaa Ej Jobbé", "Mchakhté", "Mchikha", "Mdoukha", "Mechane", "Mechaïlha Hakour", "Mechmech", "Medawar", "Mehemrech", "Mehrine", "Meis El-Jabal", "Mejdel-Anjar", "Mejdlaya", "Mejdlaya", "Merh Kfarsghabe", "Merjayoun", "Merlayet Melhem", "Metrite", "Mezher", "Mhaïbib", "Michaa Mrajhiné", "Michmiche", "Miemié", "Mikrak", "Mimas", "Mimnih", "Minet el-Hosn", "Minyara", "Misraya", "Miziara", "Mjadel", "Mjaïdel", "Mkallesse", "Mlikh", "Mohaidalé", "Mohaïdcé", "Mouchaa Kesrouan (Faraya)", "Mouchaa Kesrouan (Kfardebian)", "Mounjez", "Moussaytbeh", "Mqaibleh", "Mrabine", "Mrah Chdid", "Mrah el Hage", "Mrah-El-Sfiré", "Mrah-El-Ziet", "Mrah-el-Hbasse", "Mrah-el-Sreige", "Mreijat", "Mristé", "Msaileh", "Mtoullé Bzina", "Mugher-el-Ahwel", "Mâaraké", "Mériata", "Naamat", "Nabatiyé El-Faouka", "Nabatiyé El-Tahta", "Nabha", "Nabi Safa", "Nabi Sbate", "Nabi Youcheaa", "Nabiyeh", "Naccache", "Nadjariat", "Nahla", "Nahlé", "Nahr El-Dahab", "Nahr-Ibrahim", "Nakoura", "Nammoura et Kfar Jerif", "Nasriyat Rizk", "Neffahiyé", "Nemrine et Bakoura", "Niha", "Niha", "Niha", "Niha", "Nkhailé", "Nmériyé", "Noura El-Faouka et Tahta", "Obeidate", "Omar", "Omar el-Beikate", "Ouadi Djilou", "Ouadi El-Jamous", "Ouadi El-Osse", "Ouadi Faara", "Ouadi Khaled", "Oummouchki", "Port", "Qabbait", "Qarha", "Qarhaiya", "Qemmamine", "Qraine", "Raachine", "Rabb Salacine", "Racha", "Rachafe", "Rachana", "Rachaya El-Fokhar", "Rachaya El-Wadi", "Rachehine", "Rachkida", "Rafid-el-Mernaba", "Rahbé", "Rait", "Ram", "Ramié", "Ras Baalbek El-Charki", "Ras Baalbek El-Gharbi", "Ras Baalbek El-Sahl", "Ras Beyrouth", "Ras Maska", "Ras Nahache", "Ras el Meten", "Ras-Baalbek - Wadi Faara", "Ras-Osta", "Ras-el-Harf", "Raskifa", "Rayak", "Rayfoun", "Rechdebbine", "Recheknaniyeh", "Rechmaya", "Remadiyeh", "Remeil", "Remhala", "Riha", "Rimate", "Rmah", "Rmeiche", "Rmeileh", "Roueissat El-Naaman", "Roueissat-el-Ballout", "Roum", "Roumieh", "Roumine", "Saadine", "Sabbah", "Sadaka", "Saddikine", "Safad-el-Battikh", "Safiné-El-Kayteh", "Saghbine", "Saifé", "Sakhra", "Saki-Rechmaya", "Sakiet-El-Misk et Bhorsaf", "Sakiet-el-Kheite", "Saksakiat", "Salaata", "Salha", "Salhané", "Salhiat", "Salima", "Samiate", "Sarafend", "Sarahmoul", "Sarba", "Sarbine", "Sarhita", "Sari", "Saïd Neil", "Saïda Dekerman", "Saïda Ville", "Saïda Wastani", "Saïdnaya", "Saïdoune", "Saïssouk", "Sbouba", "Sebhel", "Sebline", "Selfaya", "Senn el Fil", "Serhel", "Serraaine El Faouka", "Serraaine El Tahta", "Sfarai", "Sfeinite El-Dreibe", "Sfenté", "Sghar et Wata Sfarta", "Shadra", "Sindianet Zeidan", "Sir", "Sir El-Gharbiyé", "Sirine", "Sirjbal", "Slaïyeb", "Slouky", "Smar Jbeil", "Snaiber", "Sniyé", "Sohmor", "Soltan-Yacoub", "Souané", "Souhailet El-Faouka", "Soujoud", "Souk-El-Gharb", "Soultaniyé", "Sour (Tyr)", "Sourate", "Srar", "Srayri", "Srifa", "Tabarja", "Tahouitat-el-Ghadir", "Tair Harf", "Tairzibna", "Tal Abbas El-Charkié", "Tal Abbas El-gharbié", "Tal Biré", "Tal Homeira", "Tal Kerri", "Tal Sibhel", "Tal Zenoub", "Tal-al-Amara", "Tal-el-Akhdar", "Talabaya", "Talia", "Talloussa", "Tamnine El-Tahta", "Tamnine-el-Fauqa", "Tamra", "Tanaïl", "Tanbourite", "Tannoura", "Tannourine Foka", "Tannourine el Tahta", "Tarane", "Taraya", "Tarchiche", "Tartige", "Taïd", "Taïr-Dabba", "Tchiflik Eddé", "Tchiflik Kikano", "Tedmor et Serghal", "Teffehta", "Tehoum", "Tellé et Chattaha", "Terbol", "Tfeil", "Tibna", "Tibnine", "Tikrite", "Torzaya", "Touaire", "Touaité", "Toula", "Toula", "Toule", "Touline", "Toura", "Tourbol", "Tourza", "Trafelsiyé", "Tripoli Al Haddadin", "Tripoli Al-Hadid", "Tripoli Al-Kobbé", "Tripoli Al-Mouhaitra", "Tripoli Al-Nouri", "Tripoli Al-Rmmanieh", "Tripoli Al-Souéka", "Tripoli Al-Tabbaneh", "Tripoli Al-Tal", "Tripoli Al-Zehrieh", "Tripoli Jardins", "Tripoli Zeitoun", "Tshea", "Wadi Abou Youssef", "Wadi Baankoudine", "Wadi Bnahley", "Wadi Chahine", "Wadi Chahrour el Olia", "Wadi Chahrour el Soufla", "Wadi Djezzine", "Wadi El-Deir", "Wadi El-Karm", "Wadi El-Sit", "Wadi Laimoune", "Wadi el-Haour", "Wadi-el-Arayeche", "Wadi-el-Dalam", "Wadi-kannoubine", "Wata Amaret Chalhoub", "Wata El-Mrouge", "Wata Houb", "Wata Salam", "Wata-El-Jaouz", "Wejh-el-Hajar", "Yahchouche", "Yahfoufa", "Yahoudiat", "Yamouné", "Yanouh", "Yanouh", "Yanta", "Yarine", "Yaroune", "Yater", "Yohmor", "Yohmor", "Younine", "Yât", "Zaaitré", "Zaarouriyeh", "Zabbougha", "Zaboud", "Zacrite", "Zaghdraya", "Zaghrteghrine", "Zahlé (Terres)", "Zahlé Al-Rassié", "Zahlé Barbara", "Zahlé Haouche Al-Oumara", "Zahlé Haouche Al-Zaraané", "Zahlé Maallaka Kerek", "Zahlé Mar Antonios", "Zahlé Mar Elias", "Zahlé Mar Gérios", "Zahlé Midan", "Zahlé Saidet Al-Najda", "Zakroune", "Zandouka", "Zane", "Zaoutar El-Charkiyé", "Zaoutar El-Gharbiyé", "Zaraoune", "Zebdine", "Zebdine", "Zebdol", "Zebkine", "Zefta", "Zeghrine", "Zeita", "Zeitoune", "Zellaya", "Zghorta", "Zghorta el-Métaoulé", "Zhalta", "Zouk Bhanine", "Zouk Mikaèl", "Zouk Mousbeh", "Zouk el Moukachérine", "Zouk-El-Habalça", "Zouk-El-Hosmieh et Dahr Ayasse", "Zouk-Khrab", "Zoukak el-Blatt", "litige", "litige", "litige", "litige", "litige", "litige", "litige", "litige", "litige", "n.a. (1)", "n.a. (2)", "n.a. (3)", "n.a. (4)"];
-
-/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(document.getElementById("myInput"), villages);

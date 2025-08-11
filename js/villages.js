@@ -43,21 +43,28 @@ function villZoomed(event) {
 
 d3.select(window).on('resize.villages', villResize);
 
+
+const baseFill = "#e6f4d8";
+// let villageData = [];
+let villageNamesArray = [];
+
 d3.json("Lebanon_Level3.json").then(data => {
     const subunits = topojson.feature(data, data.objects.gadm36_LBN_3);
+    villageData = subunits.features;
+    villageNamesArray = villageData.map(v => v.properties.NAME_3);
 
     villFeatures.selectAll("path")
         .data(subunits.features)
         .enter().append("path")
         .attr("d", villPath)
-        .attr("fill", "#e6f4d8")
+        .attr("fill", baseFill)
         .attr("stroke", "#222")
         .attr("stroke-width", 0.3)
         .on("mousemove", (event, d) => {
 
 
             // Store original color for reset
-            const baseFill = "#e6f4d8";
+
 
             // // Reset all fills to base color first
             // villFeatures.selectAll("path").attr("fill", baseFill);
@@ -110,5 +117,71 @@ d3.json("Lebanon_Level3.json").then(data => {
             d3.select("#tooltip").selectAll(".villageEntry").classed("hidden", true);
         });
 
+    autocomplete(
+        document.getElementById("myInput"),
+        villageNamesArray,
+        (selectedName) => {
+            document.getElementById("myInput").value = selectedName;
+            highlight();
+        }
+    );
+
 
 });
+
+function highlight() {
+    let name = document.getElementById("myInput").value.replace(/\s/g, '');
+
+    const match = villageData.find(v => v.properties.NAME_3.toLowerCase() === name.toLowerCase());
+    if (!match) {
+        console.error("No matching village found");
+        return;
+    }
+
+    // Reset fills
+    villFeatures.selectAll("path").attr("fill", baseFill);
+
+    // Highlight district
+    const district = match.properties.NAME_2;
+    villFeatures.selectAll("path")
+        .filter(v => v.properties.NAME_2 === district)
+        .attr("fill", "white");
+
+
+
+    villFeatures.selectAll("path")
+        .filter(v => v.properties.NAME_3.toLowerCase() === name.toLowerCase())
+        .attr("fill", "grey");
+
+    // Zoom to village bounds
+    const bounds = villPath.bounds(match);
+    const dx = bounds[1][0] - bounds[0][0];
+    const dy = bounds[1][1] - bounds[0][1];
+    const x = (bounds[0][0] + bounds[1][0]) / 2;
+    const y = (bounds[0][1] + bounds[1][1]) / 2;
+    const scale = Math.max(1, Math.min(15, 0.9 / Math.max(dx / villWidth, dy / villHeight)));
+    const translate = [villWidth / 2 - scale * x, villHeight / 2 - scale * y];
+
+    villSvg.transition().duration(750).call(
+        villZoom.transform,
+        d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)
+    );
+
+    // Show tooltip at centroid
+    const centroid = villPath.centroid(match);
+    d3.select("#tooltip")
+        .style("top", (centroid[1] + 40) + "px")
+        .style("left", (centroid[0] + 40) + "px")
+        .classed("hidden", false);
+
+    d3.select("#tooltip").select("#governorate").text(match.properties.NAME_1);
+    d3.select("#tooltip").select("#governorate-arabic").text(match.properties.Arabic_NAME_1);
+    d3.select("#tooltip").select("#district").text(match.properties.NAME_2);
+    d3.select("#tooltip").select("#district-arabic").text(match.properties.Arabic_NAME_2);
+    d3.select("#tooltip").select("#village").text(match.properties.NAME_3);
+    d3.select("#tooltip").select("#village-arabic").text(match.properties.Arabic_NAME_3);
+}
+
+
+
+
