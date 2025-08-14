@@ -221,6 +221,25 @@ function highlight() {
     d3.select("#tooltip").select("#district-arabic").text(match.properties.Arabic_NAME_2);
     d3.select("#tooltip").select("#village").text(match.properties.NAME_3);
     d3.select("#tooltip").select("#village-arabic").text(match.properties.Arabic_NAME_3);
+
+
+    d3.select('#governorate-name-1')
+        .text(match.properties.NAME_1);
+
+    d3.select('#governorate-name-1-arabic')
+        .text(match.properties.Arabic_NAME_1);
+
+    d3.select('#district-name-1')
+        .text(match.properties.NAME_2);
+
+    d3.select('#district-name-1-arabic')
+        .text(match.properties.Arabic_NAME_2);
+
+    d3.select('#village-name-1').
+        text(match.properties.NAME_3);
+
+    d3.select('#village-name-1-arabic').
+        text(match.properties.Arabic_NAME_3);
 }
 
 
