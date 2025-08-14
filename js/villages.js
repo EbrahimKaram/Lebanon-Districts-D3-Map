@@ -48,10 +48,34 @@ const baseFill = "#e6f4d8";
 // let villageData = [];
 let villageNamesArray = [];
 
+// Normalization utility: lowercase, trim, collapse internal whitespace, remove diacritics & punctuation
+function normalizeName(str) {
+    return str
+        .toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove diacritics
+        .replace(/['`´’]/g, "") // unify apostrophes
+        .replace(/[_.,/\\-]+/g, " ") // punctuation to space
+        .replace(/\s+/g, " ") // collapse spaces
+        .trim();
+}
+
+// Optional alias mapping (extend as needed)
+const villageAliases = {
+    "tyre": "sour (tyr)",
+    "tyr": "sour (tyr)",
+    "sur": "sour (tyr)",
+    "sour": "sour (tyr)" // helps if dataset lists full "Sour (Tyr)"
+};
+
 d3.json("Lebanon_Level3.json").then(data => {
     const subunits = topojson.feature(data, data.objects.gadm36_LBN_3);
     villageData = subunits.features;
     villageNamesArray = villageData.map(v => v.properties.NAME_3);
+
+    // Precompute normalized lookup for faster flexible matching
+    villageData.forEach(v => {
+        v._normalized = normalizeName(v.properties.NAME_3);
+    });
 
     villFeatures.selectAll("path")
         .data(subunits.features)
@@ -130,9 +154,26 @@ d3.json("Lebanon_Level3.json").then(data => {
 });
 
 function highlight() {
-    let name = document.getElementById("myInput").value.replace(/\s/g, '');
+    const inputEl = document.getElementById("myInput");
+    if (!inputEl) return;
+    let raw = inputEl.value.trim();
+    if (!raw) return;
 
-    const match = villageData.find(v => v.properties.NAME_3.toLowerCase() === name.toLowerCase());
+    // Apply alias if user typed a known alternative
+    const aliasKey = normalizeName(raw);
+    if (villageAliases[aliasKey]) raw = villageAliases[aliasKey];
+
+    const normalizedInput = normalizeName(raw);
+    const tokens = normalizedInput.split(/\s+/);
+
+    // Exact normalized match first
+    let match = villageData.find(v => v._normalized === normalizedInput);
+
+    // Fallback: all tokens present (order agnostic)
+    if (!match) {
+        match = villageData.find(v => tokens.every(t => v._normalized.includes(t)));
+    }
+
     if (!match) {
         console.error("No matching village found");
         return;
@@ -150,7 +191,7 @@ function highlight() {
 
 
     villFeatures.selectAll("path")
-        .filter(v => v.properties.NAME_3.toLowerCase() === name.toLowerCase())
+        .filter(v => v === match || v._normalized === match._normalized)
         .attr("fill", "grey");
 
     // Zoom to village bounds
