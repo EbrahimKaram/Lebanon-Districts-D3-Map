@@ -1,25 +1,37 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import codecs
 import json
 import pandas as pd
 import numpy as np
-import codecs
+from pathlib import Path
+import os
 
+# Use script directory to build safe paths (avoids backslash escape warnings and relative path mistakes)
+BASE_DIR = Path(__file__).resolve().parent
 
-filename = "modifier\Lebanon_Level3.json"
+filename = BASE_DIR / "Lebanon_Level3.json"
 
-if filename:
-    with codecs.open(filename, 'r', 'utf-8') as f:
+excel_file = BASE_DIR / 'English List of districts. Arabic names of districts (Aug 21 2025)Use this.xlsx'
+
+# Load JSON file safely
+if filename and filename.exists():
+    with open(str(filename), 'r', encoding='utf-8') as f:
         datastore = json.load(f)
+else:
+    raise FileNotFoundError(f"JSON file not found: {filename}")
 
 mohafazaPairs = pd.read_excel(
-    'modifier\English List of districts. Arabic names of districts 2.0.xlsx', sheet_name=3, index_col='In English')
+    excel_file, sheet_name=3, index_col='In English')
 
 districtPairs = pd.read_excel(
-    'modifier\English List of districts. Arabic names of districts 2.0.xlsx', sheet_name=2, index_col='District')
+    excel_file, sheet_name=2, index_col='District')
 
 villagePairs = pd.read_excel(
-    'modifier\English List of districts. Arabic names of districts 2.0.xlsx', sheet_name=1, index_col='English Name')
+    excel_file, sheet_name=1, index_col='English Name')
+
+# Debug: print columns and sample rows to confirm expected column names
+# (columns inspected during debugging: districtPairs uses 'District Arabic')
 
 districtPairs = districtPairs.loc[~districtPairs.index.duplicated(
     keep='first')]
@@ -37,7 +49,7 @@ for i in range(0, number_of_districts):
 
     english_district = datastore['objects'][name]["geometries"][i]['properties']['NAME_2']
     print(english_district)
-    datastore['objects'][name]["geometries"][i]['properties']['Arabic_NAME_2'] = districtPairs.loc[english_district, 'Column1']
+    datastore['objects'][name]["geometries"][i]['properties']['Arabic_NAME_2'] = districtPairs.loc[english_district, 'District Arabic']
     # print(districtPairs.loc[english_district, 'Column1'])
 
     english_village=datastore['objects'][name]["geometries"][i]['properties']['NAME_3']
