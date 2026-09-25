@@ -145,12 +145,23 @@
                 <h3>Villages/Municipalities - ضيعة</h3>
                 <br>
 
+                <div class="search-bars">
                 <form autocomplete="off">
-                    <div class="autocomplete" style="width:inherit;">
+                    <label class="search-label" for="myInput"><strong>Search village</strong> (English)</label>
+                    <div class="autocomplete">
                         <input id="myInput" type="text" name="myCountry" placeholder="Village">
                     </div>
-                    <button type="button" onclick="highlight()"><i class="fa fa-search"></i></button>
+                    <button type="button" onclick="highlightFromInput('en', document.getElementById('myInput').value)"><i class="fa fa-search"></i></button>
                 </form>
+
+                <form autocomplete="off">
+                    <label class="search-label" for="myInputAr"><strong>ابحث عن ضيعة</strong> (بالعربي)</label>
+                    <div class="autocomplete">
+                        <input id="myInputAr" type="text" dir="auto" placeholder="جرّب بأحرف لاتينية مثل baskinta">
+                    </div>
+                    <button type="button" onclick="highlightFromInput('ar', document.getElementById('myInputAr').value)"><i class="fa fa-search"></i></button>
+                </form>
+                </div>
 
                 <br>
                 <p>The map shows all the various villages in Lebanon. I would like to point out specifically that the

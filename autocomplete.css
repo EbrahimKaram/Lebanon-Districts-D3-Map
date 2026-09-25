@@ -43,3 +43,58 @@ input[type=submit] {
     background-color: DodgerBlue !important;
     color: #ffffff;
 }
+
+.search-label {
+    display: block;
+    margin: 8px 0 4px;
+    font-size: 14px;
+}
+
+/* Two search bars side by side (stack on narrow screens) */
+.search-bars {
+    display: flex;
+    gap: 12px;
+}
+
+.search-bars form {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.search-bars .autocomplete {
+    width: calc(100% - 48px);
+}
+
+.search-bars .autocomplete input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search-bars form button {
+    width: 42px;
+}
+
+@media (max-width: 480px) {
+    .search-bars {
+        flex-direction: column;
+    }
+}
+
+.autocomplete-items .sub {
+    display: block;
+    font-size: 11px;
+    color: #777;
+}
+
+.autocomplete-active .sub {
+    color: #e8e8e8;
+}
+
+.autocomplete-items div.autocomplete-no-results {
+    color: #777;
+    cursor: default;
+}
+
+.autocomplete-items div.autocomplete-no-results:hover {
+    background-color: #fff;
+}

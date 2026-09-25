@@ -46,7 +46,6 @@ d3.select(window).on('resize.villages', villResize);
 
 const baseFill = "#e6f4d8";
 // let villageData = [];
-let villageNamesArray = [];
 
 // Normalization utility: lowercase, trim, collapse internal whitespace, remove diacritics & punctuation
 function normalizeName(str) {
@@ -59,7 +58,30 @@ function normalizeName(str) {
         .trim();
 }
 
-// Optional alias mapping (extend as needed)
+// Arabic normalization: strip diacritics/tatweel, unify alef/hamza forms,
+// teh marbuta and alef maqsura, collapse whitespace (no case in Arabic)
+function normalizeArabic(str) {
+    return (str || "")
+        .normalize("NFD").replace(/[̀-ًͯ-ٰٟ]/g, "") // remove diacritics
+        .replace(/ـ/g, "") // tatweel
+        .replace(/[أإآٱ]/g, "ا")
+        .replace(/ة/g, "ه")
+        .replace(/ى/g, "ي")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
+// Arabizi digits -> their Latin transliteration equivalents (Yamli-style input)
+function arabiziToLatin(str) {
+    return str
+        .replace(/2/g, "a")
+        .replace(/3/g, "a")
+        .replace(/5/g, "kh")
+        .replace(/7/g, "h")
+        .replace(/8/g, "gh");
+}
+
+const ARABIC_RE = /[؀-ۿ]/;
 const villageAliases = {
     "tyre": "sour (tyr)",
     "tyr": "sour (tyr)",
@@ -70,11 +92,13 @@ const villageAliases = {
 d3.json("Lebanon_Level3.json").then(data => {
     const subunits = topojson.feature(data, data.objects.gadm36_LBN_3);
     villageData = subunits.features;
-    villageNamesArray = villageData.map(v => v.properties.NAME_3);
 
     // Precompute normalized lookup for faster flexible matching
     villageData.forEach(v => {
         v._normalized = normalizeName(v.properties.NAME_3);
+        v._normalizedAr = normalizeArabic(v.properties.Arabic_NAME_3);
+        // GADM alternate names (VARNAME_3, pipe-separated), e.g. "Sour (Tyr)|Tyre"
+        v._altNames = (v.properties.VARNAME_3 || "").split("|").map(normalizeName).filter(Boolean);
     });
 
     villFeatures.selectAll("path")
@@ -141,43 +165,108 @@ d3.json("Lebanon_Level3.json").then(data => {
             d3.select("#tooltip").selectAll(".villageEntry").classed("hidden", true);
         });
 
+    // English search items: label is the village name, sub shows district for
+    // disambiguation (43 names exist in multiple districts)
+    const englishItems = villageData.map(v => ({
+        label: v.properties.NAME_3,
+        sub: v.properties.NAME_2 + " · " + v.properties.NAME_1,
+        matchText: v._normalized + " " + v._altNames.join(" "),
+        ref: v
+    }));
+
+    // Arabic search items: only villages that have an Arabic name.
+    // Latin input (Yamli-style, incl. Arabizi digits) matches the English
+    // transliteration; Arabic input matches the Arabic name directly.
+    const arabicItems = villageData
+        .filter(v => v.properties.Arabic_NAME_3)
+        .map(v => ({
+            label: v.properties.Arabic_NAME_3,
+            sub: v.properties.NAME_3 + " · " + v.properties.NAME_2,
+            matchText: v._normalized,
+            matchTextAr: v._normalizedAr,
+            ref: v
+        }));
+
     autocomplete(
         document.getElementById("myInput"),
-        villageNamesArray,
-        (selectedName) => {
-            document.getElementById("myInput").value = selectedName;
-            highlight();
+        englishItems,
+        (item) => {
+            document.getElementById("myInput").value = item.label;
+            highlightFeature(item.ref);
+        },
+        {
+            maxResults: 12,
+            matcher: (item, q) => item.matchText.indexOf(q),
+            onEnterRaw: (raw) => highlightFromInput("en", raw)
+        }
+    );
+
+    autocomplete(
+        document.getElementById("myInputAr"),
+        arabicItems,
+        (item) => {
+            document.getElementById("myInputAr").value = item.label;
+            highlightFeature(item.ref);
+        },
+        {
+            maxResults: 12,
+            matcher: (item, q) => {
+                const isAr = ARABIC_RE.test(q);
+                const nq = isAr ? normalizeArabic(q) : normalizeName(arabiziToLatin(q));
+                return (isAr ? item.matchTextAr : item.matchText).indexOf(nq);
+            },
+            onEnterRaw: (raw) => highlightFromInput("ar", raw)
         }
     );
 
 
 });
 
-function highlight() {
-    const inputEl = document.getElementById("myInput");
-    if (!inputEl) return;
-    let raw = inputEl.value.trim();
+// Search from a raw typed string (search button / Enter key).
+// which is "en" or "ar".
+function highlightFromInput(which, raw) {
+    raw = (raw || "").trim();
     if (!raw) return;
 
-    // Apply alias if user typed a known alternative
-    const aliasKey = normalizeName(raw);
-    if (villageAliases[aliasKey]) raw = villageAliases[aliasKey];
+    let match = null;
+    if (which === "ar") {
+        if (ARABIC_RE.test(raw)) {
+            const nq = normalizeArabic(raw);
+            match = villageData.find(v => v._normalizedAr === nq)
+                || villageData.find(v => v._normalizedAr.includes(nq));
+        } else {
+            // Yamli-style: Latin transliteration (with Arabizi digits)
+            const nq = normalizeName(arabiziToLatin(raw));
+            match = villageData.find(v => v._normalized === nq)
+                || villageData.find(v => v._normalized.includes(nq));
+        }
+    } else {
+        // Apply alias if user typed a known alternative
+        const aliasKey = normalizeName(raw);
+        if (villageAliases[aliasKey]) raw = villageAliases[aliasKey];
 
-    const normalizedInput = normalizeName(raw);
-    const tokens = normalizedInput.split(/\s+/);
+        const normalizedInput = normalizeName(raw);
+        const tokens = normalizedInput.split(/\s+/);
 
-    // Exact normalized match first
-    let match = villageData.find(v => v._normalized === normalizedInput);
+        // Exact normalized match first
+        match = villageData.find(v => v._normalized === normalizedInput);
 
-    // Fallback: all tokens present (order agnostic)
-    if (!match) {
-        match = villageData.find(v => tokens.every(t => v._normalized.includes(t)));
+        // Fallback: all tokens present (order agnostic)
+        if (!match) {
+            match = villageData.find(v => tokens.every(t => v._normalized.includes(t)));
+        }
     }
 
     if (!match) {
         console.error("No matching village found");
         return;
     }
+    highlightFeature(match);
+}
+
+// Highlight + zoom to an exact village feature (from a suggestion pick,
+// so duplicate names in different districts resolve to the right polygon)
+function highlightFeature(match) {
 
     // Reset fills
     villFeatures.selectAll("path").attr("fill", baseFill);
