@@ -146,10 +146,19 @@
                 <br>
 
                 <form autocomplete="off">
+                    <label class="search-label" for="myInput"><strong>Search village</strong> (English)</label>
                     <div class="autocomplete" style="width:inherit;">
                         <input id="myInput" type="text" name="myCountry" placeholder="Village">
                     </div>
-                    <button type="button" onclick="highlight()"><i class="fa fa-search"></i></button>
+                    <button type="button" onclick="highlightFromInput('en', document.getElementById('myInput').value)"><i class="fa fa-search"></i></button>
+                </form>
+
+                <form autocomplete="off">
+                    <label class="search-label" for="myInputAr"><strong>ابحث عن ضيعة</strong> (بالعربي)</label>
+                    <div class="autocomplete" style="width:inherit;">
+                        <input id="myInputAr" type="text" dir="auto" placeholder="جرّب بأحرف لاتينية مثل baskinta">
+                    </div>
+                    <button type="button" onclick="highlightFromInput('ar', document.getElementById('myInputAr').value)"><i class="fa fa-search"></i></button>
                 </form>
 
                 <br>
