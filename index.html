@@ -8,7 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="D3.js map of Lebanon and its districts.">
     <meta charset="utf-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-yEPZ7jP9S0QKiUQ0m3jjsO4ProIW7wvR9gXkI7JOGa2XVsw53Yke2bsdkBbjmmiX" crossorigin="anonymous">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120812209-1"></script>
 
@@ -68,20 +69,20 @@
 
     <!-- ADD D3.JS VISUALIZATION IN #VIZ.-->
     <div class='container-fluid'>
-        <div class='row well well-lg'>
-            <div id="mohafaza" class='col-md-8 text-center'
+        <div class='row map-section'>
+            <div id="mohafaza" class='col-lg-8 text-center'
                 style="border:3px solid gray;background-color: #f8f3ed;padding-right: 0px;padding-left: 0px;"></div>
 
-            <div class='col-md-4'>
+            <div class='col-lg-4'>
                 <h1>Lebanon</h1>
                 <h3>Mohafaza - محافظة</h3>
                 <p>Lebanon has 8 main Mohafazas or governorates. Please point on the map to see them.</p>
                 <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-6">
                         <strong>Governorate:</strong> <span id="Mohafaza-name"></span>
                     </div>
-                    <div class="col-xs-6" align='right'>
+                    <div class="col-6" align='right'>
                         <strong>محافظة</strong>: <span id="Mohafaza-name-arabic"></span>
 
                     </div>
@@ -94,11 +95,11 @@
             </div>
         </div>
 
-        <div class='row well well-lg'>
-            <div id="districts" class='col-md-8 text-center'
+        <div class='row map-section'>
+            <div id="districts" class='col-lg-8 text-center'
                 style="border:3px solid gray;background-color: #f8f3ed;padding-right: 0px;padding-left: 0px;"></div>
 
-            <div class='col-md-4'>
+            <div class='col-lg-4'>
                 <h1>Lebanon</h1>
                 <h3>Qada2 - قضاء</h3>
 
@@ -112,7 +113,7 @@
                 <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
                 <div class="row">
 
-                    <div class="col-xs-6">
+                    <div class="col-6">
                         <div>
                             <strong>Governorate:</strong> <span id="governorate-name"></span>
                         </div>
@@ -122,7 +123,7 @@
                             <strong>District:</strong> <span id="district-name"></span>
                         </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-6">
                         <div align='right'>
                             <strong>محافظة</strong>: <span id="governorate-name-arabic"></span>
 
@@ -138,11 +139,11 @@
             </div>
         </div>
 
-        <div class='row well well-lg'>
-            <div id="villages" class='col-md-8 text-center'
+        <div class='row map-section'>
+            <div id="villages" class='col-lg-8 text-center'
                 style="border:3px solid gray;background-color: #f8f3ed;padding-right: 0px;padding-left: 0px;"></div>
 
-            <div class='col-md-4'>
+            <div class='col-lg-4'>
                 <h1>Lebanon</h1>
                 <h3>Villages/Municipalities - ضيعة</h3>
 
@@ -173,7 +174,7 @@
                         </label>
                         <div class="search-input-group">
                             <div class="autocomplete">
-                                <input id="myInputAr" type="text" dir="auto" placeholder="اسم الضيعة">
+                                <input id="myInputAr" type="text" dir="auto" placeholder="مثلاً: بسكنتا">
                             </div>
                             <button type="submit" aria-label="ابحث عن ضيعة">
                                 <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -209,7 +210,7 @@
                 <!-- INFO BOX. ITS CONTENT CHANGES AS USER HOVERS OVER DIFFERENT DISTRICTS ON MAP. -->
                 <div class="row">
 
-                    <div class="col-xs-6">
+                    <div class="col-6">
                         <div>
                             <strong>Governorate:</strong> <span id="governorate-name-1"></span>
                         </div>
@@ -221,7 +222,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xs-6">
+                    <div class="col-6">
                         <div align='right'>
                             <strong>محافظة</strong>: <span id="governorate-name-1-arabic"></span>
 

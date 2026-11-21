@@ -12,6 +12,12 @@ The Json is a TOPOJSON file which takes less space then your your typical geojso
 
 In order to convert the ShapeFile to a topo Json I used the following [site](http://mapshaper.org/).
 
+## Libraries
+
+The site loads Bootstrap 5.3.9 (CSS only), D3 7.9.2, and TopoJSON Client
+3.1.0 from a CDN. Their versions are pinned in `index.html`; no package install
+or build step is required.
+
 ## The Actual Site
 
 You can check the interactive D3 map on the link below
