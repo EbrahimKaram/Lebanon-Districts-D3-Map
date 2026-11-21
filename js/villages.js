@@ -97,6 +97,10 @@ d3.json("Lebanon_Level3.json").then(data => {
     villageData.forEach(v => {
         v._normalized = normalizeName(v.properties.NAME_3);
         v._normalizedAr = normalizeArabic(v.properties.Arabic_NAME_3);
+        v._districtNormalized = normalizeName(v.properties.NAME_2);
+        v._governorateNormalized = normalizeName(v.properties.NAME_1);
+        v._districtNormalizedAr = normalizeArabic(v.properties.Arabic_NAME_2);
+        v._governorateNormalizedAr = normalizeArabic(v.properties.Arabic_NAME_1);
         // GADM alternate names (VARNAME_3, pipe-separated), e.g. "Sour (Tyr)|Tyre"
         v._altNames = (v.properties.VARNAME_3 || "").split("|").map(normalizeName).filter(Boolean);
     });
@@ -181,9 +185,9 @@ d3.json("Lebanon_Level3.json").then(data => {
         .filter(v => v.properties.Arabic_NAME_3)
         .map(v => ({
             label: v.properties.Arabic_NAME_3,
-            sub: v.properties.NAME_3 + " · " + v.properties.NAME_2,
-            matchText: v._normalized,
-            matchTextAr: v._normalizedAr,
+            sub: [v.properties.Arabic_NAME_2, v.properties.Arabic_NAME_1].filter(Boolean).join(" · "),
+            matchText: [v._normalized, v._districtNormalized, v._governorateNormalized, v._altNames.join(" ")].join(" "),
+            matchTextAr: [v._normalizedAr, v._districtNormalizedAr, v._governorateNormalizedAr].join(" "),
             ref: v
         }));
 
@@ -233,12 +237,20 @@ function highlightFromInput(which, raw) {
         if (ARABIC_RE.test(raw)) {
             const nq = normalizeArabic(raw);
             match = villageData.find(v => v._normalizedAr === nq)
-                || villageData.find(v => v._normalizedAr.includes(nq));
+                || villageData.find(v => v._normalizedAr.includes(nq))
+                || villageData.find(v => v._districtNormalizedAr === nq)
+                || villageData.find(v => v._districtNormalizedAr.includes(nq))
+                || villageData.find(v => v._governorateNormalizedAr === nq)
+                || villageData.find(v => v._governorateNormalizedAr.includes(nq));
         } else {
             // Yamli-style: Latin transliteration (with Arabizi digits)
             const nq = normalizeName(arabiziToLatin(raw));
             match = villageData.find(v => v._normalized === nq)
-                || villageData.find(v => v._normalized.includes(nq));
+                || villageData.find(v => v._normalized.includes(nq))
+                || villageData.find(v => v._districtNormalized === nq)
+                || villageData.find(v => v._districtNormalized.includes(nq))
+                || villageData.find(v => v._governorateNormalized === nq)
+                || villageData.find(v => v._governorateNormalized.includes(nq));
         }
     } else {
         // Apply alias if user typed a known alternative
