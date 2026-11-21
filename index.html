@@ -8,8 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="D3.js map of Lebanon and its districts.">
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-120812209-1"></script>
 
@@ -159,7 +158,10 @@
                                     placeholder="e.g. Baalbek">
                             </div>
                             <button type="submit" aria-label="Search for village in English">
-                                <i class="fa fa-search" aria-hidden="true"></i>
+                                <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path
+                                        d="M10.5 3a7.5 7.5 0 1 0 4.7 13.3l5.1 5.1 1.4-1.4-5.1-5.1A7.5 7.5 0 0 0 10.5 3Zm0 2a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11Z" />
+                                </svg>
                             </button>
                         </div>
                     </form>
@@ -174,7 +176,10 @@
                                 <input id="myInputAr" type="text" dir="auto" placeholder="اسم الضيعة">
                             </div>
                             <button type="submit" aria-label="ابحث عن ضيعة">
-                                <i class="fa fa-search" aria-hidden="true"></i>
+                                <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path
+                                        d="M10.5 3a7.5 7.5 0 1 0 4.7 13.3l5.1 5.1 1.4-1.4-5.1-5.1A7.5 7.5 0 0 0 10.5 3Zm0 2a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11Z" />
+                                </svg>
                             </button>
                         </div>
                     </form>
@@ -245,10 +250,8 @@
     </div>
 
 
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://unpkg.com/topojson-client@3"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.2/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
 
 
     <link rel="stylesheet" href="tooltip.css">
