@@ -146,24 +146,38 @@
             <div class='col-md-4'>
                 <h1>Lebanon</h1>
                 <h3>Villages/Municipalities - ضيعة</h3>
-                <br>
 
                 <div class="search-bars">
-                <form autocomplete="off">
-                    <label class="search-label" for="myInput"><strong>Search village</strong> (English)</label>
-                    <div class="autocomplete">
-                        <input id="myInput" type="text" name="myCountry" placeholder="Village">
-                    </div>
-                    <button type="button" onclick="highlightFromInput('en', document.getElementById('myInput').value)"><i class="fa fa-search"></i></button>
-                </form>
+          
 
-                <form autocomplete="off">
-                    <label class="search-label" for="myInputAr"><strong>ابحث عن ضيعة</strong> (بالعربي)</label>
-                    <div class="autocomplete">
-                        <input id="myInputAr" type="text" dir="auto" placeholder="جرّب بأحرف لاتينية مثل baskinta">
-                    </div>
-                    <button type="button" onclick="highlightFromInput('ar', document.getElementById('myInputAr').value)"><i class="fa fa-search"></i></button>
-                </form>
+                    <form autocomplete="off"
+                        onsubmit="highlightFromInput('en', document.getElementById('myInput').value); return false;">
+                        <label class="search-label" for="myInput"><strong>Search village</strong> (English)</label>
+                        <div class="search-input-group">
+                            <div class="autocomplete">
+                                <input id="myInput" type="text" name="myCountry"
+                                    placeholder="e.g. Baalbek">
+                            </div>
+                            <button type="submit" aria-label="Search for village in English">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <form autocomplete="off"
+                        onsubmit="highlightFromInput('ar', document.getElementById('myInputAr').value); return false;">
+                        <label class="search-label search-label-arabic" for="myInputAr">
+                            <strong>ابحث عن ضيعة</strong> (بالعربي)
+                        </label>
+                        <div class="search-input-group">
+                            <div class="autocomplete">
+                                <input id="myInputAr" type="text" dir="auto" placeholder="اسم الضيعة">
+                            </div>
+                            <button type="submit" aria-label="ابحث عن ضيعة">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <br>

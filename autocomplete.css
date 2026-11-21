@@ -4,7 +4,7 @@
     /*the container must be positioned relative:*/
     position: relative;
     display: inline-block;
-    width: inherit;
+    min-width: 0;
 }
 
 
@@ -23,7 +23,8 @@ input[type=submit] {
     top: 100%;
     left: 0;
     right: 0;
-    width: inherit;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .autocomplete-items div {
@@ -46,38 +47,86 @@ input[type=submit] {
 
 .search-label {
     display: block;
-    margin: 8px 0 4px;
+    margin: 0 0 7px;
     font-size: 14px;
+    color: #3f3b36;
 }
 
-/* Two search bars side by side (stack on narrow screens) */
 .search-bars {
     display: flex;
-    gap: 12px;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 20px;
 }
 
 .search-bars form {
-    flex: 1 1 0;
-    min-width: 0;
+    margin: 0;
 }
 
-.search-bars .autocomplete {
-    width: calc(100% - 48px);
+.search-intro {
+    margin: 0;
+    color: #6f675e;
+    font-size: 13px;
 }
 
-.search-bars .autocomplete input {
+.search-label-arabic {
+    text-align: right;
+    direction: rtl;
+}
+
+.search-input-group {
+    display: flex;
     width: 100%;
+}
+
+.search-input-group .autocomplete {
+    flex: 1 1 auto;
+}
+
+.search-input-group input {
+    display: block;
+    width: 100%;
+    height: 40px;
+    padding: 8px 10px;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.4;
+    background: #fff;
+    border: 1px solid #aaa49d;
+    border-right: 0;
+    border-radius: 4px 0 0 4px;
     box-sizing: border-box;
 }
 
-.search-bars form button {
-    width: 42px;
+.search-input-group input:focus {
+    position: relative;
+    z-index: 1;
+    border-color: #77716a;
+    outline: 0;
+    box-shadow: inset 0 0 0 1px #77716a;
 }
 
-@media (max-width: 480px) {
-    .search-bars {
-        flex-direction: column;
-    }
+.search-input-group button {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 40px;
+    padding: 0;
+    color: #302d29;
+    background: #e8d8c3;
+    border: 1px solid #aaa49d;
+    border-radius: 0 4px 4px 0;
+}
+
+.search-input-group button:hover,
+.search-input-group button:focus {
+    color: #111;
+    background: #dfcfba;
+    border-color: #77716a;
+    outline: 0;
+}
+
+.search-input-group button:focus {
+    box-shadow: inset 0 0 0 1px #77716a;
 }
 
 .autocomplete-items .sub {
